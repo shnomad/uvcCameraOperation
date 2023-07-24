@@ -1,0 +1,3 @@
+[all]
+#mqtt broker IP#mqtt Clientname#TCP SocketServer Port
+#10.42.0.69#ch1#60001
