@@ -4,6 +4,10 @@ controller::controller(QObject *parent) : QObject(parent)
 {
     m_command = new cli_monitor;
     cmd_host = new sys_cmd_resp;
+
+    camera_init_timer = new QTimer(this);
+    camera_init_timer->setSingleShot(true);
+
     camera_capture_timer = new QTimer(this);
     camera_capture_timer->setSingleShot(true);
 
@@ -29,6 +33,8 @@ controller::controller(QObject *parent) : QObject(parent)
 
     m_pCameraThread->start();
 
+    camera_init_timer->start(3000);
+
     connect(camera_capture_timer, &QTimer::timeout, [=]()
     {
         cmd_host->m_cmd_cam = sys_cmd_resp::CMD_CAMERA_CAPTURE;
@@ -40,6 +46,12 @@ controller::controller(QObject *parent) : QObject(parent)
             camera_capture_timer->start(50);
         else
             capture_count=0;
+    });
+
+    connect(camera_init_timer, &QTimer::timeout, [=]()
+    {
+        cmd_host->m_cmd_cam = sys_cmd_resp::CMD_CAMERA_OPEN;
+        emit sig_cmd_camera_from_main(cmd_host);
     });
 }
 

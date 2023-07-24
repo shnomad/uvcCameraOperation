@@ -38,6 +38,8 @@ private:
     QTimer *camera_capture_timer;
     quint32 capture_count=0;
 
+    QTimer *camera_init_timer;
+
 };
 
 #endif // CONTROLLER_H

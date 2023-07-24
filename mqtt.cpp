@@ -29,7 +29,7 @@ mqtt::mqtt(QObject *parent) : QObject(parent)
 
        connect_broker_timer = new QTimer;
        connect_broker_timer->setSingleShot(true);
-       connect_broker_timer->setInterval(500);
+//       connect_broker_timer->setInterval(500);
 
        pub_topic_status_timer = new QTimer;
        pub_topic_status_timer->setSingleShot(true);
@@ -103,7 +103,7 @@ mqtt::mqtt(QObject *parent) : QObject(parent)
 
        updateLogStateChange();
 
-       connect_broker_timer->start();
+       connect_broker_timer->start(1000);
 }
 
 mqtt::~mqtt()
@@ -199,8 +199,8 @@ void mqtt::brokerConnected()
     Log()<<"Connected";
     Log()<<"client_id :"<<client_id;
 
-    pub_topic_status_timer->start();
-    sub_topic_cmd_timer->start();
+    pub_topic_status_timer->start(1000);
+    sub_topic_cmd_timer->start(2000);
 }
 
 bool mqtt::Publish(QString topic, QString msg, quint8 Qos, bool retain)
