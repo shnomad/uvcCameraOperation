@@ -1,0 +1,14 @@
+[Unit]
+Description=Qt application autostart
+After=graphical.target
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/rt/uvcCameraOperation/bin/
+ExecStart=/bin/bash -c '/home/rt/uvcCameraOperation/bin/uvcCameraOperation /home/rt/uvcCam.log 2>&1'
+
+[Install]
+WantedBy=multi-user.target
