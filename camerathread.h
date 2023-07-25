@@ -27,7 +27,8 @@ private:
     void init();
     void open();
     void capture_ready();
-    void capture();
+//    void capture();
+    void capture(QString);
     void close();
 
     /*parameter for UVC Camera*/

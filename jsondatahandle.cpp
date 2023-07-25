@@ -91,12 +91,60 @@ QString JsonDataHandle::encode_resp(QString channel,sys_cmd_resp *response)
      return encode_data;
 }
 
-sys_cmd_resp::cmd_cam JsonDataHandle::cmd_parsing(QString message)
-{
+//sys_cmd_resp::cmd_cam JsonDataHandle::cmd_parsing(QString message)
+sys_cmd_resp* JsonDataHandle::cmd_parsing(QString message)
+{    
     QJsonDocument jsonDoc =  QJsonDocument::fromJson(message.toUtf8());
     QJsonObject jsonObj = jsonDoc.object();
-
     QJsonValue command = jsonObj.value("command");
 
-    return  static_cast<sys_cmd_resp::cmd_cam>(command.toInt());
+    cmd_from_host->m_cmd_cam = static_cast<sys_cmd_resp::cmd_cam>(command.toInt());
+
+    Log()<<cmd_from_host->m_cmd_cam;
+
+    switch(static_cast<quint8>(command.toInt()))
+    {
+        case sys_cmd_resp::CMD_CAMERA_CONNECTED_CHECK:
+
+        break;
+
+        case sys_cmd_resp::CMD_CAMERA_SERVER_INFO:
+
+        break;
+
+        case sys_cmd_resp::CMD_CAMERA_SET_ROI_PARAMETER:
+
+        break;
+
+        case sys_cmd_resp::CMD_CAMERA_SET_TRIGGER_INTERVAL:
+        case sys_cmd_resp::CMD_CAMERA_OPEN:
+        case sys_cmd_resp::CMD_CAMERA_CAPTURE:
+            {
+              QJsonValue trigger = jsonObj.value("trigger");
+              QString trigger_tmp = trigger.toString();
+
+              cmd_from_host->triggeer_interval = trigger_tmp.toInt();
+
+              Log()<<"cmd_from_host->triggeer_interval :"<<cmd_from_host->triggeer_interval;
+            }
+
+        break;
+        case sys_cmd_resp::CMD_CAMERA_CLOSE:
+
+        break;
+
+        case sys_cmd_resp::CMD_CAMERA_IMG_SEND_ONE_FRAME:
+
+        break;
+
+        case sys_cmd_resp::CMD_CAMERA_IMG_SEND_CONCAT:
+
+        break;
+
+        case sys_cmd_resp::CMD_CAMERA_UNKNOWN:
+
+        break;
+    }
+
+    return cmd_from_host;
 }

@@ -22,7 +22,9 @@ public:
     ~JsonDataHandle();
 
      QString encode_resp(QString, sys_cmd_resp *);
-     sys_cmd_resp::cmd_cam cmd_parsing(QString);
+     sys_cmd_resp* cmd_parsing(QString);
+
+     sys_cmd_resp *cmd_from_host;
 
 signals:     
      void sig_comm_status(sys_cmd_resp *);

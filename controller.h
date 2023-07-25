@@ -22,6 +22,9 @@ signals:
 public slots:
 
 private:
+    /*OLED display*/
+    void display_init();
+
     /*TCP Socket server*/
     SocketServer *m_socket_server;
 
@@ -38,7 +41,9 @@ private:
     QTimer *camera_capture_timer;
     quint32 capture_count=0;
 
-    QTimer *camera_init_timer;
+    QTimer *camera_init_timer, *oled_display_timer;
+    unsigned char symbol_count =0;
+    bool dispay_status_msg = false;
 
 };
 

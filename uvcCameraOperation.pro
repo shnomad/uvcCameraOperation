@@ -20,6 +20,8 @@ SOURCES += \
         cli_monitor.cpp \
         controller.cpp \
         deviceinfo.cpp \
+#       display/display.c \
+        display/ssd1306_i2c.c \
         jsondatahandle.cpp \
         main.cpp \
         mqtt.cpp \
@@ -63,6 +65,9 @@ HEADERS += \
     common.h \
     controller.h \
     deviceinfo.h \
+    display/bmp.h \
+    display/oled_fonts.h \
+    display/ssd1306_i2c.h \
     jsondatahandle.h \
     mqtt.h \
     socketserver.h \

@@ -80,7 +80,7 @@ void CameraThread::open()
     if (res < 0)
     {
           uvc_perror(res, "uvc_open"); /* unable to open device */
-          exit(0);
+//        exit(0);
     }
     else
     {
@@ -122,13 +122,15 @@ void CameraThread::capture_ready()
     res = uvc_stream_start(m_strmh, nullptr,nullptr,0);
 }
 
-void CameraThread::capture()
+//void CameraThread::capture()
+void CameraThread::capture(QString trigger_value)
 {
     res = uvc_stream_get_frame(m_strmh, &captured_frame,0);
 
     QDateTime Current_Time = QDateTime::currentDateTime();
 
-    QString filename = Current_Time.toString("yyyyMMddhhmmsszzz") + ".jpg";
+    //QString filename = Current_Time.toString("yyyyMMddhhmmsszzz") + ".jpg";
+    QString filename = trigger_value + ".jpg";
 
     emit sig_send_image_file(captured_frame->data, filename, captured_frame->data_bytes);
 
@@ -185,9 +187,11 @@ void CameraThread::operation(sys_cmd_resp *cmd)
 
         break;
 
-        case sys_cmd_resp::CMD_CAMERA_CAPTURE:
+        case sys_cmd_resp::CMD_CAMERA_CAPTURE:         
 
-         capture();
+         Log()<<"cmd->triggeer_interval :"<<cmd->triggeer_interval;
+
+         capture(QString("%1").arg(cmd->triggeer_interval, 7, 'g', -1, '0'));
 
         break;
 

@@ -29,7 +29,6 @@ mqtt::mqtt(QObject *parent) : QObject(parent)
 
        connect_broker_timer = new QTimer;
        connect_broker_timer->setSingleShot(true);
-//       connect_broker_timer->setInterval(500);
 
        pub_topic_status_timer = new QTimer;
        pub_topic_status_timer->setSingleShot(true);
@@ -63,7 +62,7 @@ mqtt::mqtt(QObject *parent) : QObject(parent)
 
            Log()<<client_id<<":"<<content;
 
-           m_cmd_mqtt->m_cmd_cam =json_to_cmd->cmd_parsing(message);
+           m_cmd_mqtt =json_to_cmd->cmd_parsing(message);
 
            if(m_cmd_mqtt->m_cmd_cam == sys_cmd_resp::CMD_CAMERA_CONNECTED_CHECK)
            {
