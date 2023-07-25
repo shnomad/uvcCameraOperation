@@ -46,7 +46,9 @@ void SocketServer::appendToSocketList(QTcpSocket* socket)
     connect(socket, &QTcpSocket::disconnected, this, &SocketServer::discardSocket);
     connect(socket, &QAbstractSocket::errorOccurred, this, &SocketServer::displayError);
     //ui->comboBox_receiver->addItem(QString::number(socket->socketDescriptor()));
-    displayMessage(QString("INFO :: Client with sockd:%1 has just entered the room").arg(socket->socketDescriptor()));
+    displayMessage(QString("INFO :: Client with sockd:%1 has just entered the room").arg(socket->socketDescriptor())); 
+//  file_receiver = socket->socketDescriptor();
+    recv_socket = socket;
 }
 
 void SocketServer::readSocket()
@@ -195,19 +197,23 @@ void SocketServer::sendAttachment_click(void *img, QString img_name, quint32 img
 //  if(receiver=="Broadcast")
     if(1)
     {
+        Log()<<"start Transfer";
+
         foreach (QTcpSocket* socket,connection_set)
         {
             sendAttachment(socket, img, img_name, img_size);
         }
+
+        Log()<<"end Transfer";
     }
     else
-    {
-        foreach (QTcpSocket* socket,connection_set)
-        {
-            if(socket->socketDescriptor() == receiver.toLongLong())
+    {        
+        foreach (QTcpSocket* socket, connection_set)
+        { 
+            if(socket->socketDescriptor() == receiver)
             {
                  sendAttachment(socket, img, img_name, img_size);
-                break;
+                 break;
             }
         }
     }

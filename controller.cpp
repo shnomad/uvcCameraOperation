@@ -42,7 +42,7 @@ controller::controller(QObject *parent) : QObject(parent)
     m_pCameraThread->start();
 
     camera_init_timer->start(3000);
-    oled_display_timer->start(1000);
+//  oled_display_timer->start(1000);
 
     connect(camera_capture_timer, &QTimer::timeout, [=]()
     {
@@ -78,7 +78,7 @@ controller::controller(QObject *parent) : QObject(parent)
              symbol_count=0;
 
         if(!dispay_status_msg)
-            oled_display_timer->start(3000);
+            oled_display_timer->start(5000);
     });
 }
 

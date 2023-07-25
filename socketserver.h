@@ -39,7 +39,7 @@ private slots:
 private:
      QTcpServer* m_server;
      QSet<QTcpSocket*> connection_set;
-
+     QTcpSocket* recv_socket;
 };
 
 #endif // SOCKETSERVER_H
