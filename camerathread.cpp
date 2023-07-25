@@ -129,11 +129,11 @@ void CameraThread::capture(QString trigger_value)
 
     QDateTime Current_Time = QDateTime::currentDateTime();
 
-    //QString filename = Current_Time.toString("yyyyMMddhhmmsszzz") + ".jpg";
-    //QString filename = trigger_value + ".jpg";
-    QString filename = "/home/rt/capture_file/" +trigger_value + ".jpg";
+  // QString filename = "/home/rt/capture_file/" +Current_Time.toString("yyyyMMddhhmmsszzz") + ".jpg";
+    QString filename = trigger_value + ".jpg";
+    //QString filename = "/home/rt/capture_file/" +trigger_value + ".jpg";
 
-//   emit sig_send_image_file(captured_frame->data, filename, captured_frame->data_bytes);
+     emit sig_send_image_file(captured_frame->data, filename, captured_frame->data_bytes);
 
 //   imageBuffer.push_back(QByteArray(static_cast<const char*>(captured_frame->data), captured_frame->data_bytes));
 //   imageNameBuffer.push_back(filename);
@@ -143,7 +143,7 @@ void CameraThread::capture(QString trigger_value)
         emit sig_image_save_start();
    }
 */
-
+/*
     FILE *fp;
 
     fp = fopen(filename.toStdString().c_str(), "w");
@@ -152,6 +152,8 @@ void CameraThread::capture(QString trigger_value)
 
     fclose(fp);
 
+    Log();
+*/
 }
 
 void CameraThread::close()
