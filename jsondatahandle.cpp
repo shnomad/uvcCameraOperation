@@ -1,9 +1,10 @@
 #include "jsondatahandle.h"
 #include "common.h"
+#include <typeinfo>
 
 JsonDataHandle::JsonDataHandle(QObject *parent) : QObject(parent)
 {
-
+    cmd_from_host = new sys_cmd_resp;
 }
 
 JsonDataHandle::~JsonDataHandle()
@@ -85,6 +86,8 @@ QString JsonDataHandle::encode_resp(QString channel,sys_cmd_resp *response)
 
     QJsonDocument jsonDoc(mainObject);
 
+    jsonDoc.setObject(mainObject);
+
     /* Write our jsondocument as json with JSON format */
      QString encode_data = QString::fromUtf8(jsonDoc.toJson());
 
@@ -96,19 +99,22 @@ sys_cmd_resp* JsonDataHandle::cmd_parsing(QString message)
 {    
     QJsonDocument jsonDoc =  QJsonDocument::fromJson(message.toUtf8());
     QJsonObject jsonObj = jsonDoc.object();
-    QJsonValue command = jsonObj.value("command");
+    QJsonValue cmd = jsonObj.value("command");
 
-    cmd_from_host->m_cmd_cam = static_cast<sys_cmd_resp::cmd_cam>(command.toInt());
+    quint8 temp_cmd = static_cast<quint8>(cmd.toInt());
 
-    Log()<<cmd_from_host->m_cmd_cam;
+    cmd_from_host->m_cmd_cam = static_cast<sys_cmd_resp::cmd_cam>(temp_cmd);
 
-    switch(static_cast<quint8>(command.toInt()))
+    //switch(static_cast<quint8>(cmd.toInt()))
+    switch(cmd_from_host->m_cmd_cam)
     {
         case sys_cmd_resp::CMD_CAMERA_CONNECTED_CHECK:
 
         break;
 
         case sys_cmd_resp::CMD_CAMERA_SERVER_INFO:
+
+            cmd_from_host->m_cmd_cam = sys_cmd_resp::CMD_CAMERA_SERVER_INFO;
 
         break;
 
