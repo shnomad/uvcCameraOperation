@@ -129,9 +129,9 @@ void CameraThread::capture(QString trigger_value)
 
     QDateTime Current_Time = QDateTime::currentDateTime();
 
-  // QString filename = "/home/rt/capture_file/" +Current_Time.toString("yyyyMMddhhmmsszzz") + ".jpg";
-    QString filename = trigger_value + ".jpg";
-    //QString filename = "/home/rt/capture_file/" +trigger_value + ".jpg";
+   //QString filename = "/home/rt/capture_file/" +Current_Time.toString("yyyyMMddhhmmsszzz") + ".jpg";
+     QString filename = trigger_value + ".jpg";
+   //QString filename = "/home/rt/capture_file/" +trigger_value + ".jpg";
 
      emit sig_send_image_file(captured_frame->data, filename, captured_frame->data_bytes);
 

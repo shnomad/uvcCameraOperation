@@ -273,30 +273,20 @@ void SocketServer::sendAttachment(QTcpSocket* socket, void *file, QString file_n
             socketStream << bytearray;
 
 #else
-                QFile m_file(filePath);
 
-                if(m_file.open(QIODevice::ReadOnly))
-                {
+        QByteArray block = QByteArray(static_cast<const char*>(file), file_size);
+//      QDataStream out(&block, QIODevice::WriteOnly);
+//      out.setVersion(QDataStream::Qt_5_15);
 
-                    QFileInfo fileInfo(m_file.fileName());
-                    QString fileName(fileInfo.fileName());
+        QByteArray header;
+        header.prepend(QString("fileType:attachment,fileName:%1,fileSize:%2;").arg(file_name).arg(file_size).toUtf8());
+        header.resize(128);
 
-                    QDataStream socketStream(socket);
-                    socketStream.setVersion(QDataStream::Qt_5_15);
+        block.prepend(header);
 
-                    QByteArray header;
-                    header.prepend(QString("fileType:attachment,fileName:%1,fileSize:%2;").arg(fileName).arg(m_file.size()).toUtf8());
-                    header.resize(128);
+        socket->write(block);
+        socket->flush();
 
-                    QByteArray byteArray = m_file.readAll();
-                    byteArray.prepend(header);
-
-                    socketStream << byteArray;
-                }
-                else
-                {
-                    Log()<<"QTCPClient","Couldn't open the attachment!";
-                }
 #endif
           }
           else

@@ -18,6 +18,7 @@ controller::controller(QObject *parent) : QObject(parent)
     /*OLED Display*/
     display_init();
     FirstGetIpAddress();                        //Get IP address
+    LCD_Display(symbol_count);
 
     /*Create TCP Socket Server*/
     m_socket_server = new SocketServer;
@@ -41,8 +42,8 @@ controller::controller(QObject *parent) : QObject(parent)
 
     m_pCameraThread->start();
 
-    camera_init_timer->start(3000);
-    oled_display_timer->start(1000);
+//  camera_init_timer->start(3000);
+//  oled_display_timer->start(1000);
 
     connect(camera_capture_timer, &QTimer::timeout, [=]()
     {
@@ -78,7 +79,7 @@ controller::controller(QObject *parent) : QObject(parent)
              symbol_count=0;
 
         if(!dispay_status_msg)
-            oled_display_timer->start(5000);
+            oled_display_timer->start(10000);
     });
 }
 

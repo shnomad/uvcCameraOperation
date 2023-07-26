@@ -28,6 +28,20 @@ SOURCES += \
         socketserver.cpp \
         sys_cmd_resp.cpp
 
+HEADERS += \
+    camerathread.h \
+    cli_monitor.h \
+    common.h \
+    controller.h \
+    deviceinfo.h \
+    display/bmp.h \
+    display/oled_fonts.h \
+    display/ssd1306_i2c.h \
+    jsondatahandle.h \
+    mqtt.h \
+    socketserver.h \
+    sys_cmd_resp.h
+
 INCLUDEPATH +=/opt/Rpi4-roadtech/sysroot/usr/local/include
 INCLUDEPATH +=/opt/Rpi4-roadtech/sysroot/usr/local/lib/opencv-4.6.0/include/opencv4
 
@@ -58,17 +72,3 @@ LIBS += -L/opt/Rpi4-roadtech/sysroot/usr/local/lib/arm-linux-gnueabihf -luvc \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /home/rt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-HEADERS += \
-    camerathread.h \
-    cli_monitor.h \
-    common.h \
-    controller.h \
-    deviceinfo.h \
-    display/bmp.h \
-    display/oled_fonts.h \
-    display/ssd1306_i2c.h \
-    jsondatahandle.h \
-    mqtt.h \
-    socketserver.h \
-    sys_cmd_resp.h

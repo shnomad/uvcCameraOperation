@@ -40,6 +40,7 @@ private:
      QTcpServer* m_server;
      QSet<QTcpSocket*> connection_set;
      QTcpSocket* recv_socket;
+//   QDataStream socketStream;
 };
 
 #endif // SOCKETSERVER_H

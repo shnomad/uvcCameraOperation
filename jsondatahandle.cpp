@@ -140,15 +140,12 @@ sys_cmd_resp* JsonDataHandle::cmd_parsing(QString message)
         break;
 
         case sys_cmd_resp::CMD_CAMERA_IMG_SEND_ONE_FRAME:
-
         break;
 
         case sys_cmd_resp::CMD_CAMERA_IMG_SEND_CONCAT:
-
         break;
 
         case sys_cmd_resp::CMD_CAMERA_UNKNOWN:
-
         break;
     }
 
