@@ -1,0 +1,71 @@
+#ifndef SETTING_FLAGNAME_DEFINITION_H
+#define SETTING_FLAGNAME_DEFINITION_H
+
+#define rdth_survey_set                      "survey_set"
+#define rdth_dmi_information                 "dmi_information"
+#define rdth_dmi_isUsed                      "dmi_isUsed"
+#define rdth_dmi_interval                    "dmi_interval"
+
+#define rdth_camera_front_description         "camera_front_description"
+#define rdth_camera_left_description          "camera_left_description"
+#define rdth_camera_right_description         "camera_right_description"
+#define rdth_camera_rear_description          "camera_rear_description"
+#define rdth_camera_ground_description          "camera_rear_description"
+
+#define rdth_camera_front_trigger_interval    "camera_front_trigger_interval"
+#define rdth_camera_left_trigger_interval     "camera_left_trigger_interval"
+#define rdth_camera_right_trigger_interval    "camera_right_trigger_interval"
+#define rdth_camera_rear_trigger_interval     "camera_rear_trigger_interval"
+#define rdth_camera_ground_trigger_interval     "camera_rear_trigger_interval"
+
+#define rdth_camera_front_resolution          "camera_front_resolution"
+#define rdth_camera_left_resolution           "camera_left_resolution"
+#define rdth_camera_right_resolution          "camera_right_resolution"
+#define rdth_camera_rear_resolution           "camera_rear_resolution"
+
+#define rdth_image_roi_camera_front_c_x0_position        "image_roi_camera_front_c_x0_position"
+#define rdth_image_roi_camera_front_c_x1_position        "image_roi_camera_front_c_x1_position"
+#define rdth_image_roi_camera_front_c_x2_position        "image_roi_camera_front_c_x2_position"
+#define rdth_image_roi_camera_front_c_x3_position        "image_roi_camera_front_c_x3_position"
+#define rdth_image_roi_camera_front_c_y0_position        "image_roi_camera_front_c_y0_position"
+#define rdth_image_roi_camera_front_c_y1_position        "image_roi_camera_front_c_y1_position"
+#define rdth_image_roi_camera_front_c_y2_position        "image_roi_camera_front_c_y2_position"
+#define rdth_image_roi_camera_front_c_y3_position        "image_roi_camera_front_c_y3_position"
+
+#define rdth_image_roi_camera_left_c_x0_position        "image_roi_camera_left_c_x0_position"
+#define rdth_image_roi_camera_left_c_x1_position        "image_roi_camera_left_c_x1_position"
+#define rdth_image_roi_camera_left_c_x2_position        "image_roi_camera_left_c_x2_position"
+#define rdth_image_roi_camera_left_c_x3_position        "image_roi_camera_left_c_x3_position"
+#define rdth_image_roi_camera_left_c_y0_position        "image_roi_camera_left_c_y0_position"
+#define rdth_image_roi_camera_left_c_y1_position        "image_roi_camera_left_c_y1_position"
+#define rdth_image_roi_camera_left_c_y2_position        "image_roi_camera_left_c_y2_position"
+#define rdth_image_roi_camera_left_c_y3_position        "image_roi_camera_left_c_y3_position"
+
+#define rdth_image_roi_camera_right_c_x0_position        "image_roi_camera_right_c_x0_position"
+#define rdth_image_roi_camera_right_c_x1_position        "image_roi_camera_right_c_x1_position"
+#define rdth_image_roi_camera_right_c_x2_position        "image_roi_camera_right_c_x2_position"
+#define rdth_image_roi_camera_right_c_x3_position        "image_roi_camera_right_c_x3_position"
+#define rdth_image_roi_camera_right_c_y0_position        "image_roi_camera_right_c_y0_position"
+#define rdth_image_roi_camera_right_c_y1_position        "image_roi_camera_right_c_y1_position"
+#define rdth_image_roi_camera_right_c_y2_position        "image_roi_camera_right_c_y2_position"
+#define rdth_image_roi_camera_right_c_y3_position        "image_roi_camera_right_c_y3_position"
+
+#define rdth_image_roi_camera_rear_c_x0_position        "image_roi_camera_rear_c_x0_position"
+#define rdth_image_roi_camera_rear_c_x1_position        "image_roi_camera_rear_c_x1_position"
+#define rdth_image_roi_camera_rear_c_x2_position        "image_roi_camera_rear_c_x2_position"
+#define rdth_image_roi_camera_rear_c_x3_position        "image_roi_camera_rear_c_x3_position"
+#define rdth_image_roi_camera_rear_c_y0_position        "image_roi_camera_rear_c_y0_position"
+#define rdth_image_roi_camera_rear_c_y1_position        "image_roi_camera_rear_c_y1_position"
+#define rdth_image_roi_camera_rear_c_y2_position        "image_roi_camera_rear_c_y2_position"
+#define rdth_image_roi_camera_rear_c_y3_position        "image_roi_camera_rear_c_y3_position"
+
+#define rdth_image_roi_camera_ground_c_x0_position        "image_roi_camera_ground_c_x0_position"
+#define rdth_image_roi_camera_ground_c_x1_position        "image_roi_camera_ground_c_x1_position"
+#define rdth_image_roi_camera_ground_c_x2_position        "image_roi_camera_ground_c_x2_position"
+#define rdth_image_roi_camera_ground_c_x3_position        "image_roi_camera_ground_c_x3_position"
+#define rdth_image_roi_camera_ground_c_y0_position        "image_roi_camera_ground_c_y0_position"
+#define rdth_image_roi_camera_ground_c_y1_position        "image_roi_camera_ground_c_y1_position"
+#define rdth_image_roi_camera_ground_c_y2_position        "image_roi_camera_ground_c_y2_position"
+#define rdth_image_roi_camera_ground_c_y3_position        "image_roi_camera_ground_c_y3_position"
+
+#endif // SETTING_FLAGNAME_DEFINITION_H

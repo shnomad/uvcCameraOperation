@@ -22,9 +22,12 @@ SOURCES += \
         deviceinfo.cpp \
 #       display/display.c \
         display/ssd1306_i2c.c \
+    image_concat.cpp \
+    image_warp_perspective.cpp \
         jsondatahandle.cpp \
         main.cpp \
         mqtt.cpp \
+    settings.cpp \
         socketserver.cpp \
         sys_cmd_resp.cpp
 
@@ -37,8 +40,12 @@ HEADERS += \
     display/bmp.h \
     display/oled_fonts.h \
     display/ssd1306_i2c.h \
+    image_concat.h \
+    image_warp_perspective.h \
     jsondatahandle.h \
     mqtt.h \
+    setting_flagname_definition.h \
+    settings.h \
     socketserver.h \
     sys_cmd_resp.h
 

@@ -177,6 +177,7 @@ void CameraThread::operation(sys_cmd_resp *cmd)
      switch(cmd->m_cmd_cam)
      {
         case sys_cmd_resp::CMD_CAMERA_SET_ROI_PARAMETER:
+
         break;
 
         case sys_cmd_resp::CMD_CAMERA_SET_TRIGGER_INTERVAL:
@@ -206,6 +207,7 @@ void CameraThread::operation(sys_cmd_resp *cmd)
         break;
 
         case sys_cmd_resp::CMD_CAMERA_IMG_SEND_CONCAT:
+
         break;
 
         case sys_cmd_resp::CMD_CAMERA_SERVER_INFO:
