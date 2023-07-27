@@ -6,9 +6,9 @@ SocketServer::SocketServer(QObject *parent) : QObject(parent)
 {
     deviceInfo m_dev_info;
 
-    m_server = new QTcpServer();
+    m_server = new QTcpServer(this);
 
-    m_server->setMaxPendingConnections(1);
+//  m_server->setMaxPendingConnections(5);
 
     //if(m_server->listen(QHostAddress::Any, 60001))
     if(m_server->listen(QHostAddress::Any, m_dev_info.get_ServerPort().toUShort()))
@@ -36,7 +36,12 @@ SocketServer::~SocketServer()
 void SocketServer::newConnection()
 {
     while (m_server->hasPendingConnections())
-            appendToSocketList(m_server->nextPendingConnection());
+              appendToSocketList(m_server->nextPendingConnection());
+/*
+    QTcpSocket *clientConnection = m_server->nextPendingConnection();
+        connect(clientConnection, &QAbstractSocket::disconnected,
+                clientConnection, &QObject::deleteLater);
+*/
 }
 
 void SocketServer::appendToSocketList(QTcpSocket* socket)
@@ -45,10 +50,8 @@ void SocketServer::appendToSocketList(QTcpSocket* socket)
     connect(socket, &QTcpSocket::readyRead, this, &SocketServer::readSocket);
     connect(socket, &QTcpSocket::disconnected, this, &SocketServer::discardSocket);
     connect(socket, &QAbstractSocket::errorOccurred, this, &SocketServer::displayError);
-    //ui->comboBox_receiver->addItem(QString::number(socket->socketDescriptor()));
-    displayMessage(QString("INFO :: Client with sockd:%1 has just entered the room").arg(socket->socketDescriptor())); 
-//  file_receiver = socket->socketDescriptor();
-    recv_socket = socket;
+    connect(socket, &QAbstractSocket::disconnected, socket, &QObject::deleteLater);
+    displayMessage(QString("INFO :: Client with sockd:%1 has just entered the room").arg(socket->socketDescriptor()));     
 }
 
 void SocketServer::readSocket()
@@ -126,7 +129,10 @@ void SocketServer::discardSocket()
     }
 //    refreshComboBox();
 
-    socket->deleteLater();
+//    socket->abort();
+//    socket->close();
+//    socket->deleteLater();
+      socket->disconnectFromHost();
 }
 
 void SocketServer::displayError(QAbstractSocket::SocketError socketError)
@@ -179,7 +185,7 @@ void SocketServer::sendMessage_click()
     }
 }
 
-void SocketServer::sendAttachment_click(void *img, QString img_name, quint32 img_size)
+void SocketServer::sendAttachment_click(void *img, QString img_name, quint32 img_size, quint8 capture_mode)
 {
 
     Log();
@@ -201,7 +207,7 @@ void SocketServer::sendAttachment_click(void *img, QString img_name, quint32 img
 
         foreach (QTcpSocket* socket,connection_set)
         {
-            sendAttachment(socket, img, img_name, img_size);
+            sendAttachment(socket, img, img_name, img_size, capture_mode);
         }
 
         Log()<<"end Transfer";
@@ -212,7 +218,7 @@ void SocketServer::sendAttachment_click(void *img, QString img_name, quint32 img
         { 
             if(socket->socketDescriptor() == receiver)
             {
-                 sendAttachment(socket, img, img_name, img_size);
+                 sendAttachment(socket, img, img_name, img_size, capture_mode);
                  break;
             }
         }
@@ -253,18 +259,18 @@ void SocketServer::sendMessage(QTcpSocket* socket)
         }
 }
 
-void SocketServer::sendAttachment(QTcpSocket* socket, void *file, QString file_name, quint32 file_size)
+void SocketServer::sendAttachment(QTcpSocket* socket, void *file, QString file_name, quint32 file_size, quint8 capture_mode)
 {
     if(socket)
       {
         if(socket->isOpen())
           {
-#if 1
             QDataStream socketStream(socket);
             socketStream.setVersion(QDataStream::Qt_5_15);
 
             QByteArray header;
-            header.prepend(QString("fileType:attachment,fileName:%1,fileSize:%2;").arg(file_name).arg(file_size).toUtf8());
+//          header.prepend(QString("fileType:attachment,fileName:%1,fileSize:%2;").arg(file_name).arg(file_size).toUtf8());
+            header.prepend(QString("fileType:attachment,fileName:%1,fileSize:%2,mode:%3;").arg(file_name).arg(file_size).arg(capture_mode).toUtf8());
             header.resize(128);
 
             QByteArray bytearray = QByteArray(static_cast<const char*>(file), file_size);
@@ -272,22 +278,6 @@ void SocketServer::sendAttachment(QTcpSocket* socket, void *file, QString file_n
 
             socketStream << bytearray;
 
-#else
-
-        QByteArray block = QByteArray(static_cast<const char*>(file), file_size);
-//      QDataStream out(&block, QIODevice::WriteOnly);
-//      out.setVersion(QDataStream::Qt_5_15);
-
-        QByteArray header;
-        header.prepend(QString("fileType:attachment,fileName:%1,fileSize:%2;").arg(file_name).arg(file_size).toUtf8());
-        header.resize(128);
-
-        block.prepend(header);
-
-        socket->write(block);
-        socket->flush();
-
-#endif
           }
           else
           {

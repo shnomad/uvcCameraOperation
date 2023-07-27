@@ -191,6 +191,9 @@ void mqtt::updateLogStateChange()
 void mqtt::brokerDisconnected()
 {
     Log()<<client_id<<": DisConnected";
+
+    /*Retry Broker connect*/
+    connect_broker_timer->start(10);
 }
 
 void mqtt::brokerConnected()

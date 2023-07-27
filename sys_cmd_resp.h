@@ -25,6 +25,12 @@ public:
             DEVICE_TYPE_UNKNOWN
         };
 
+    enum camera_capture_mode{
+        CAPTURE_MODE_NORMAL=0x0,
+        CAPTURE_MODE_TEST,
+        CAPTURE_MODE_UNKNOWN = 0xf,
+    };Q_ENUM(camera_capture_mode)
+
     QString Client_ID = "";
     QString ServerIP ="";
     QString ServerPort ="";
@@ -44,6 +50,7 @@ public:
     cmd_cam m_cmd_cam = CMD_CAMERA_UNKNOWN;
     resp_cam m_resp_cam = RESP_CAMERA_UNKNOWN;
     device_type m_device_type = DEVICE_TYPE_UNKNOWN;
+    camera_capture_mode m_camera_capture_mode = CAPTURE_MODE_UNKNOWN;
 
 signals:
 

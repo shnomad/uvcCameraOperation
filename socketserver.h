@@ -19,7 +19,7 @@ signals:
      void newMessage(QString);
 
 public slots:
-    void sendAttachment_click(void *img, QString img_name, quint32 img_size);
+    void sendAttachment_click(void *img, QString img_name, quint32 img_size, quint8 mode);
     void sendMessage_click();
 
 private slots:
@@ -34,7 +34,7 @@ private slots:
 
     void sendMessage(QTcpSocket* socket);
     //void sendAttachment(QTcpSocket* socket, QString filePath);
-      void sendAttachment(QTcpSocket* socket, void *file, QString file_name, quint32 file_size);
+    void sendAttachment(QTcpSocket* socket, void *file, QString file_name, quint32 file_size, quint8 mode);
 
 private:
      QTcpServer* m_server;

@@ -18,7 +18,8 @@ public:
 
 signals:
      void sig_image_save_start();
-     void sig_send_image_file(void *img, QString img_name, quint32 img_size);
+//     void sig_send_image_file(void *img, QString img_name, quint32 img_size);
+       void sig_send_image_file(void *img, QString img_name, quint32 img_size, quint8);
 
 public slots:
     void operation(sys_cmd_resp *);
@@ -28,7 +29,8 @@ private:
     void open();
     void capture_ready();
 //    void capture();
-    void capture(QString);
+    //void capture(QString);
+    void capture(QString, sys_cmd_resp::camera_capture_mode);
     void close();
 
     /*parameter for UVC Camera*/

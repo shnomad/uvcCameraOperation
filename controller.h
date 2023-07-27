@@ -7,6 +7,7 @@
 #include "socketserver.h"
 #include "camerathread.h"
 #include "cli_monitor.h"
+#include "oled_display.h"
 #include "mqtt.h"
 
 class controller : public QObject
@@ -22,27 +23,27 @@ signals:
 public slots:
 
 private:
-    /*OLED display*/
-    void display_init();
 
     /*TCP Socket server*/
     SocketServer *m_socket_server;
 
-    /*MQTT Thread*/
+    /*MQTT*/
      mqtt *m_mqttClient;
-     QThread *m_pmqttClientThread;
 
     /*Camera Thread*/
     QThread *m_pCameraThread;
     CameraThread *m_camera;
     cli_monitor *m_command;
 
+    /*oled display*/
+    oled_display *m_oled_display;
+    QThread *m_poledThread;
+
     sys_cmd_resp *cmd_host;
     QTimer *camera_capture_timer;
     quint32 capture_count=0;
 
-    QTimer *camera_init_timer, *oled_display_timer;
-    unsigned char symbol_count =0;
+    QTimer *camera_init_timer;
     bool dispay_status_msg = false;
 
 };

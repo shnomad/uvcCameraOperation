@@ -27,6 +27,7 @@ SOURCES += \
         jsondatahandle.cpp \
         main.cpp \
         mqtt.cpp \
+    oled_display.cpp \
     settings.cpp \
         socketserver.cpp \
         sys_cmd_resp.cpp
@@ -44,6 +45,7 @@ HEADERS += \
     image_warp_perspective.h \
     jsondatahandle.h \
     mqtt.h \
+    oled_display.h \
     setting_flagname_definition.h \
     settings.h \
     socketserver.h \

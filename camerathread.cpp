@@ -123,17 +123,18 @@ void CameraThread::capture_ready()
 }
 
 //void CameraThread::capture()
-void CameraThread::capture(QString trigger_value)
+//void CameraThread::capture(QString trigger_value)
+void CameraThread::capture(QString trigger_value, sys_cmd_resp::camera_capture_mode capture_mode)
 {
-    res = uvc_stream_get_frame(m_strmh, &captured_frame,0);
+    res = uvc_stream_get_frame(m_strmh, &captured_frame,0);        
 
-    QDateTime Current_Time = QDateTime::currentDateTime();
+//  QDateTime Current_Time = QDateTime::currentDateTime();
 
    //QString filename = "/home/rt/capture_file/" +Current_Time.toString("yyyyMMddhhmmsszzz") + ".jpg";
      QString filename = trigger_value + ".jpg";
    //QString filename = "/home/rt/capture_file/" +trigger_value + ".jpg";
 
-     emit sig_send_image_file(captured_frame->data, filename, captured_frame->data_bytes);
+     emit sig_send_image_file(captured_frame->data, filename, captured_frame->data_bytes, static_cast<quint8>(capture_mode));
 
 //   imageBuffer.push_back(QByteArray(static_cast<const char*>(captured_frame->data), captured_frame->data_bytes));
 //   imageNameBuffer.push_back(filename);
@@ -193,7 +194,7 @@ void CameraThread::operation(sys_cmd_resp *cmd)
 
          Log()<<"cmd->triggeer_interval :"<<cmd->triggeer_interval;
 
-         capture(QString("%1").arg(cmd->triggeer_interval, 7, 'g', -1, '0'));
+         capture(QString("%1").arg(cmd->triggeer_interval, 7, 'g', -1, '0'), cmd->m_camera_capture_mode);
 
         break;
 

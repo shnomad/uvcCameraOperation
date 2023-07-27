@@ -1,5 +1,4 @@
 #include "controller.h"
-#include "display/ssd1306_i2c.h"
 
 controller::controller(QObject *parent) : QObject(parent)
 {
@@ -11,14 +10,6 @@ controller::controller(QObject *parent) : QObject(parent)
 
     camera_capture_timer = new QTimer(this);
     camera_capture_timer->setSingleShot(true);
-
-    oled_display_timer = new QTimer(this);
-    oled_display_timer->setSingleShot(true);
-
-    /*OLED Display*/
-    display_init();
-    FirstGetIpAddress();                        //Get IP address
-    LCD_Display(symbol_count);
 
     /*Create TCP Socket Server*/
     m_socket_server = new SocketServer;
@@ -33,17 +24,24 @@ controller::controller(QObject *parent) : QObject(parent)
     /*Create MQTT*/
     m_mqttClient = new mqtt;
 
+    /*OLED Display*/
+    m_oled_display = new oled_display;
+    m_poledThread = new QThread(this);
+
+    m_oled_display->moveToThread(m_poledThread);
+    connect(m_poledThread, &QThread::finished, m_oled_display, &QObject::deleteLater);
+
     /*connect command/response signal*/
     connect(this, SIGNAL(sig_cmd_camera_from_main(sys_cmd_resp*)), m_camera, SLOT(operation(sys_cmd_resp*)));
     connect(m_mqttClient, SIGNAL(sig_cmd_from_mqtt_to_camera(sys_cmd_resp*)), m_camera, SLOT(operation(sys_cmd_resp*)));
 
     /*connecto Camera to TCP socket server*/
-    connect(m_camera, SIGNAL(sig_send_image_file(void*, QString,quint32)), m_socket_server, SLOT(sendAttachment_click(void*, QString, quint32)));
+    connect(m_camera, SIGNAL(sig_send_image_file(void*,QString,quint32,quint8)), m_socket_server, SLOT(sendAttachment_click(void*,QString,quint32,quint8)));
 
     m_pCameraThread->start();
+    m_poledThread->start();
 
     camera_init_timer->start(3000);
-//  oled_display_timer->start(1000);
 
     connect(camera_capture_timer, &QTimer::timeout, [=]()
     {
@@ -69,26 +67,9 @@ controller::controller(QObject *parent) : QObject(parent)
         cmd_host->m_cmd_cam = sys_cmd_resp::CMD_CAMERA_OPEN;
         emit sig_cmd_camera_from_main(cmd_host);
     });
-
-    connect(oled_display_timer, &QTimer::timeout, [=]()
-    {
-        LCD_Display(symbol_count);
-        symbol_count++;
-
-        if(symbol_count==3)
-             symbol_count=0;
-
-        if(!dispay_status_msg)
-            oled_display_timer->start(10000);
-    });
 }
 
 controller::~controller()
 {
 
-}
-
-void controller::display_init()
-{
-  ssd1306_begin(SSD1306_SWITCHCAPVCC, SSD1306_I2C_ADDRESS);      //LCD Screen initialization
 }
