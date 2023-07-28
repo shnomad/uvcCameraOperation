@@ -42,10 +42,15 @@ mqtt::mqtt(QObject *parent) : QObject(parent)
        sub_topic_cmd_timer->setSingleShot(true);
        sub_topic_cmd_timer->setInterval(300);
 
+       sub_topic_trigger_timer = new QTimer;
+       sub_topic_trigger_timer->setSingleShot(true);
+       sub_topic_trigger_timer->setInterval(300);
+
        connect(connect_broker_timer, SIGNAL(timeout()), this, SLOT(ConnectBroker()));
        connect(pub_topic_status_timer, SIGNAL(timeout()), this, SLOT(pub_status_topic()));
-       connect(pub_topic_resp_timer, SIGNAL(timeout()), this, SLOT(pub_response_topic()));
        connect(sub_topic_cmd_timer, SIGNAL(timeout()), this, SLOT(sub_host_cmd_topic()));
+       connect(pub_topic_resp_timer, SIGNAL(timeout()), this, SLOT(pub_response_topic()));
+       connect(sub_topic_trigger_timer, SIGNAL(timeout()), this, SLOT(sub_trigger_topic()));
 
        connect(m_client, &QMqttClient::stateChanged, this, &mqtt::updateLogStateChange);
        connect(m_client, &QMqttClient::disconnected, this, &mqtt::brokerDisconnected);
@@ -253,6 +258,8 @@ bool mqtt::pub_response_topic()
     {
         Log()<<client_id<<" :pub_response_topic success";
 
+        sub_topic_trigger_timer->start();
+
         return true;
     }
 
@@ -277,6 +284,19 @@ bool mqtt::sub_host_cmd_topic()
     return false;
 }
 
+bool mqtt::sub_trigger_topic()
+{
+    if(Subscribe(sub_topic_trigger + "+"))
+    {
+        Log()<<"sub_topic_trigger success";
+
+        return true;
+    }
+
+    Log()<<"sub_topic_trigger failed";
+
+    return false;
+}
 
 QString mqtt::getLocalInfo()
 {
@@ -295,3 +315,4 @@ QString mqtt::getLocalInfo()
 
     return localip;
 }
+

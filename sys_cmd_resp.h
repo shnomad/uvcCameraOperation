@@ -21,7 +21,7 @@ public:
 
     enum device_type{
             DEVICE_TYPE_USB_CAMERA=0x0,
-            DEVICE_TYPE_DISTANCE_MEASUREMET,
+            DEVICE_TYPE_DISTANCE_MEASUREMENT_INSTRUMENT,
             DEVICE_TYPE_UNKNOWN
         };
 

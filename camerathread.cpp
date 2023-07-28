@@ -122,8 +122,6 @@ void CameraThread::capture_ready()
     res = uvc_stream_start(m_strmh, nullptr,nullptr,0);
 }
 
-//void CameraThread::capture()
-//void CameraThread::capture(QString trigger_value)
 void CameraThread::capture(QString trigger_value, sys_cmd_resp::camera_capture_mode capture_mode)
 {
     res = uvc_stream_get_frame(m_strmh, &captured_frame,0);        
@@ -133,6 +131,8 @@ void CameraThread::capture(QString trigger_value, sys_cmd_resp::camera_capture_m
    //QString filename = "/home/rt/capture_file/" +Current_Time.toString("yyyyMMddhhmmsszzz") + ".jpg";
      QString filename = trigger_value + ".jpg";
    //QString filename = "/home/rt/capture_file/" +trigger_value + ".jpg";
+
+//   Log()<<filename;
 
      emit sig_send_image_file(captured_frame->data, filename, captured_frame->data_bytes, static_cast<quint8>(capture_mode));
 

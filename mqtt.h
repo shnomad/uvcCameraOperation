@@ -35,16 +35,18 @@ public slots:
     bool pub_response_topic();
 //  bool pub_response_topic(QString);
     bool sub_host_cmd_topic();
+    bool sub_trigger_topic();
 
 private:
      QMqttClient *m_client;
 
      QString client_id;
-     QString pub_topic_status ="usbCam/connected/";
-     QString pub_topic_resp ="usbCam/resp/";
-     QString sub_topic_cmd ="usbCam/cmd/";
+     QString pub_topic_status ="device/connected/";
+     QString pub_topic_resp ="device/resp/";
+     QString sub_topic_trigger = "device/trigger/";
+     QString sub_topic_cmd ="device/cmd/";
 
-     QTimer *connect_broker_timer, *pub_topic_status_timer, *pub_topic_resp_timer, *sub_topic_cmd_timer;
+     QTimer *connect_broker_timer, *pub_topic_status_timer, *pub_topic_resp_timer, *sub_topic_cmd_timer, *sub_topic_trigger_timer;
 
      /* Coding channel control parameter */
 //   Coding_Channel_Ctl mqtt_coding_ch_ctl{}, mqtt_coding_ch_ctl_tmp{};     
