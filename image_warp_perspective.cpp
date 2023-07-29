@@ -4,9 +4,10 @@
 #include "image_warp_perspective.h"
 #include "common.h"
 
-imageWarpPerspective::imageWarpPerspective(quint8 th_ch, QObject *parent) : QObject(parent)
+//imageWarpPerspective::imageWarpPerspective(quint8 th_ch, QObject *parent) : QObject(parent)
+imageWarpPerspective::imageWarpPerspective(QObject *parent) : QObject(parent)
 {
-      thread_ch = th_ch;
+      //thread_ch = th_ch;
       m_image_concat = new image_concat;
 
     connect(this, &imageWarpPerspective::sig_image_concat_buf_0, [&]()
@@ -111,8 +112,10 @@ imageWarpPerspective::~imageWarpPerspective()
 {
       delete m_image_concat;
 }
-
+/*
 void imageWarpPerspective::imageWarp(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3, int ratio,\
+                                     */
+Mat imageWarpPerspective::imageWarp(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3, int ratio,\
                                      QString name, Mat original_img, bool input_caption)
 {
     QMutex mutex;
@@ -194,16 +197,18 @@ void imageWarpPerspective::imageWarp(int x0, int y0, int x1, int y1, int x2, int
 
     warpPerspective(original_img, warpImg, trans, warpSize);     //output : warpImg
 
+    return warpImg;
+
     /*Input Text informaion to warped Image*/
-    if(input_caption)
-        putText(warpImg, chrTest_input, Point(200, 1900),1, 10, Scalar(0, 128, 255), 3, 8);    
+//    if(input_caption)
+//        putText(warpImg, chrTest_input, Point(200, 1900),1, 10, Scalar(0, 128, 255), 3, 8);
 
 //  imwrite(chrTest, warpImg);
 
     /*Warped Image save to Vetor list*/
 
     Log()<<"thread_ch "<<thread_ch <<" image_warped_count :"<<image_warped_count;
-
+#if 0
     if(image_warped_count <10)
     {
         buf0_mutex.lock();
@@ -259,6 +264,7 @@ void imageWarpPerspective::imageWarp(int x0, int y0, int x1, int y1, int x2, int
             image_warped_count=0;
         }
     }
+#endif
 }
 
 void imageWarpPerspective::check_image_warped_buffer_empty(int buffer)

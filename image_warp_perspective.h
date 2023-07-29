@@ -8,22 +8,24 @@
 #include <QMutex>
 #include "image_concat.h"
 //#include <windows.h>
-//#include "opencv2/imgproc.hpp"
-//#include "opencv2/imgcodecs.hpp"
-//#include "opencv2/highgui.hpp"
+#include "opencv2/imgproc.hpp"
+#include "opencv2/imgcodecs.hpp"
+#include "opencv2/highgui.hpp"
 
-//using namespace std;
-//using namespace cv;
+using namespace std;
+using namespace cv;
 
 class imageWarpPerspective : public QObject
 {
     Q_OBJECT
 
 public:
-      explicit imageWarpPerspective(quint8,QObject *parent = nullptr);
+      //explicit imageWarpPerspective(quint8,QObject *parent = nullptr);
+     explicit imageWarpPerspective(QObject *parent = nullptr);
     ~imageWarpPerspective();
 
-    void imageWarp(int, int, int, int, int, int, int, int, int, QString, Mat, bool);
+    //void imageWarp(int, int, int, int, int, int, int, int, int, QString, Mat, bool);
+     Mat imageWarp(int, int, int, int, int, int, int, int, int, QString, Mat, bool);
 
 signals:
 //    void sig_image_concat(bool);

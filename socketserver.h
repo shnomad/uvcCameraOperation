@@ -17,6 +17,7 @@ public:
 
 signals:
      void newMessage(QString);
+     void sig_send_file(const QByteArray , QString);
 
 public slots:
     void sendAttachment_click(void *img, QString img_name, quint32 img_size, quint8 mode);

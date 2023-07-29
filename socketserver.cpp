@@ -187,7 +187,6 @@ void SocketServer::sendMessage_click()
 
 void SocketServer::sendAttachment_click(void *img, QString img_name, quint32 img_size, quint8 capture_mode)
 {
-
     Log();
 /*
     FILE *fp;
@@ -264,19 +263,25 @@ void SocketServer::sendAttachment(QTcpSocket* socket, void *file, QString file_n
     if(socket)
       {
         if(socket->isOpen())
-          {
+          {                        
+
             QDataStream socketStream(socket);
             socketStream.setVersion(QDataStream::Qt_5_15);
 
             QByteArray header;
-//          header.prepend(QString("fileType:attachment,fileName:%1,fileSize:%2;").arg(file_name).arg(file_size).toUtf8());
+
             header.prepend(QString("fileType:attachment,fileName:%1,fileSize:%2,mode:%3;").arg(file_name).arg(file_size).arg(capture_mode).toUtf8());
             header.resize(128);
 
             QByteArray bytearray = QByteArray(static_cast<const char*>(file), file_size);
+
             bytearray.prepend(header);
 
             socketStream << bytearray;
+
+            bytearray = bytearray.mid(128);
+
+            emit sig_send_file(bytearray, file_name);
 
           }
           else

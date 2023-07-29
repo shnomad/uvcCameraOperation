@@ -18,8 +18,7 @@ public:
 
 signals:
      void sig_image_save_start();
-//     void sig_send_image_file(void *img, QString img_name, quint32 img_size);
-       void sig_send_image_file(void *img, QString img_name, quint32 img_size, quint8);
+     void sig_send_image_file(void *img, QString img_name, quint32 img_size, quint8);
 
 public slots:
     void operation(sys_cmd_resp *);

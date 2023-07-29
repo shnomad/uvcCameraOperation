@@ -134,7 +134,7 @@ void CameraThread::capture(QString trigger_value, sys_cmd_resp::camera_capture_m
 
 //   Log()<<filename;
 
-     emit sig_send_image_file(captured_frame->data, filename, captured_frame->data_bytes, static_cast<quint8>(capture_mode));
+     emit sig_send_image_file(captured_frame->data, filename, captured_frame->data_bytes, static_cast<quint8>(capture_mode));     
 
 //   imageBuffer.push_back(QByteArray(static_cast<const char*>(captured_frame->data), captured_frame->data_bytes));
 //   imageNameBuffer.push_back(filename);
@@ -182,7 +182,7 @@ void CameraThread::operation(sys_cmd_resp *cmd)
         break;
 
         case sys_cmd_resp::CMD_CAMERA_SET_TRIGGER_INTERVAL:
-        break;
+         break;
 
         case sys_cmd_resp::CMD_CAMERA_OPEN:
 

@@ -9,6 +9,7 @@
 #include "cli_monitor.h"
 #include "oled_display.h"
 #include "mqtt.h"
+#include "image_post_process.h"
 
 class controller : public QObject
 {
@@ -33,12 +34,16 @@ private:
     /*Camera Thread*/
     QThread *m_pCameraThread;
     CameraThread *m_camera;
-    cli_monitor *m_command;
 
-    /*oled display*/
+    /*Image process thread*/
+    QThread *m_pImagePostProcessThread;
+    image_post_process *m_img_PostProcess;
+
+    /*oled display*/                
     oled_display *m_oled_display;
     QThread *m_poledThread;
 
+    cli_monitor *m_command;
     sys_cmd_resp *cmd_host;
     QTimer *camera_capture_timer;
     quint32 capture_count=0;
