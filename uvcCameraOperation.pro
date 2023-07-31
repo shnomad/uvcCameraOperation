@@ -22,14 +22,14 @@ SOURCES += \
         deviceinfo.cpp \
 #       display/display.c \
         display/ssd1306_i2c.c \
-    image_concat.cpp \
-    image_post_process.cpp \
-    image_warp_perspective.cpp \
+#       image_concat.cpp \
+#       image_post_process.cpp \
+#       image_warp_perspective.cpp \
         jsondatahandle.cpp \
         main.cpp \
         mqtt.cpp \
-    oled_display.cpp \
-    settings.cpp \
+        oled_display.cpp \
+        settings.cpp \
         socketserver.cpp \
         sys_cmd_resp.cpp
 
@@ -42,9 +42,10 @@ HEADERS += \
     display/bmp.h \
     display/oled_fonts.h \
     display/ssd1306_i2c.h \
-    image_concat.h \
-    image_post_process.h \
-    image_warp_perspective.h \
+#    global.h \
+#   image_concat.h \
+#    image_post_process.h \
+#    image_warp_perspective.h \
     jsondatahandle.h \
     mqtt.h \
     oled_display.h \
@@ -54,30 +55,30 @@ HEADERS += \
     sys_cmd_resp.h
 
 INCLUDEPATH +=/opt/Rpi4-roadtech/sysroot/usr/local/include
-INCLUDEPATH +=/opt/Rpi4-roadtech/sysroot/usr/local/lib/opencv-4.6.0/include/opencv4
+#INCLUDEPATH +=/opt/Rpi4-roadtech/sysroot/usr/local/lib/opencv-4.6.0/include/opencv4
 
-LIBS += -L/opt/Rpi4-roadtech/sysroot/usr/local/lib/arm-linux-gnueabihf -luvc \
-        -L/opt/Rpi4-roadtech/sysroot/usr/local/lib/opencv-4.6.0/lib \
-         -lopencv_calib3d \
-         -lopencv_core \
-         -lopencv_features2d \
-         -lopencv_flann \
-         -lopencv_highgui \
-         -lopencv_imgcodecs \
-         -lopencv_imgproc \
-         -lopencv_ml \
-         -lopencv_dnn \
-         -lopencv_objdetect \
-         -lopencv_photo \
-         -lopencv_shape \
-         -lopencv_stitching \
-         -lopencv_superres \
-         -lopencv_video \
-         -lopencv_videoio \
-         -lopencv_videostab \
-         -lopencv_optflow \
-         -lopencv_ximgproc \
-         -lopencv_xfeatures2d
+LIBS += -L/opt/Rpi4-roadtech/sysroot/usr/local/lib/arm-linux-gnueabihf -luvc
+#        -L/opt/Rpi4-roadtech/sysroot/usr/local/lib/opencv-4.6.0/lib \
+#         -lopencv_calib3d \
+#         -lopencv_core \
+#         -lopencv_features2d \
+#         -lopencv_flann \
+#         -lopencv_highgui \
+#         -lopencv_imgcodecs \
+#         -lopencv_imgproc \
+#         -lopencv_ml \
+#         -lopencv_dnn \
+#         -lopencv_objdetect \
+#         -lopencv_photo \
+#         -lopencv_shape \
+#         -lopencv_stitching \
+#         -lopencv_superres \
+#         -lopencv_video \
+#         -lopencv_videoio \
+#         -lopencv_videostab \
+#         -lopencv_optflow \
+#         -lopencv_ximgproc \
+#         -lopencv_xfeatures2d
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

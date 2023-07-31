@@ -32,11 +32,11 @@ controller::controller(QObject *parent) : QObject(parent)
     connect(m_poledThread, &QThread::finished, m_oled_display, &QObject::deleteLater);
 
     /*Image Post Process Thread*/
-    m_img_PostProcess = new image_post_process;
-    m_pImagePostProcessThread = new QThread(this);
+//    m_img_PostProcess = new image_post_process;
+//    m_pImagePostProcessThread = new QThread(this);
 
-    m_img_PostProcess->moveToThread(m_pImagePostProcessThread);
-    connect(m_pImagePostProcessThread, &QThread::finished, m_img_PostProcess, &QObject::deleteLater);
+//    m_img_PostProcess->moveToThread(m_pImagePostProcessThread);
+ //   connect(m_pImagePostProcessThread, &QThread::finished, m_img_PostProcess, &QObject::deleteLater);
 
     /*connect command/response signal*/
     connect(this, SIGNAL(sig_cmd_camera_from_main(sys_cmd_resp*)), m_camera, SLOT(operation(sys_cmd_resp*)));
@@ -44,11 +44,11 @@ controller::controller(QObject *parent) : QObject(parent)
 
     /*connecto Camera to TCP socket server*/
     connect(m_camera, SIGNAL(sig_send_image_file(void*,QString,quint32,quint8)), m_socket_server, SLOT(sendAttachment_click(void*,QString,quint32,quint8)));
-    connect(m_socket_server, SIGNAL(sig_send_file(const QByteArray &, QString)), m_img_PostProcess, SLOT(read_image(const QByteArray &, QString)));
+ //   connect(m_socket_server, SIGNAL(sig_image_post_process()), m_img_PostProcess, SLOT(image_roi_concat()));
 
     m_pCameraThread->start();
     m_poledThread->start();
-    m_pImagePostProcessThread->start();
+//    m_pImagePostProcessThread->start();
 
     camera_init_timer->start(3000);
 
@@ -61,12 +61,12 @@ controller::controller(QObject *parent) : QObject(parent)
 
         if(capture_count<100)
         {
-            cmd_host->triggeer_interval +=100;
+            cmd_host->m_trigger_distance_total +=100;
             camera_capture_timer->start(50);
         }
         else
         {
-            cmd_host->triggeer_interval = 0;
+            cmd_host->m_trigger_distance_total = 0;
             capture_count=0;
         }
     });

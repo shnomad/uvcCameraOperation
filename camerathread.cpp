@@ -132,9 +132,9 @@ void CameraThread::capture(QString trigger_value, sys_cmd_resp::camera_capture_m
      QString filename = trigger_value + ".jpg";
    //QString filename = "/home/rt/capture_file/" +trigger_value + ".jpg";
 
-//   Log()<<filename;
+     Log()<<filename;
 
-     emit sig_send_image_file(captured_frame->data, filename, captured_frame->data_bytes, static_cast<quint8>(capture_mode));     
+     emit sig_send_image_file(captured_frame->data, filename, captured_frame->data_bytes, static_cast<quint8>(capture_mode));
 
 //   imageBuffer.push_back(QByteArray(static_cast<const char*>(captured_frame->data), captured_frame->data_bytes));
 //   imageNameBuffer.push_back(filename);
@@ -192,9 +192,9 @@ void CameraThread::operation(sys_cmd_resp *cmd)
 
         case sys_cmd_resp::CMD_CAMERA_CAPTURE:         
 
-         Log()<<"cmd->triggeer_interval :"<<cmd->triggeer_interval;
+         Log()<<"cmd->triggeer_interval :"<<cmd->m_trigger_distance_total;
 
-         capture(QString("%1").arg(cmd->triggeer_interval, 7, 'g', -1, '0'), cmd->m_camera_capture_mode);
+         capture(QString("%1").arg(cmd->m_trigger_distance_total, 7, 'g', -1, '0'), cmd->m_camera_capture_mode);
 
         break;
 

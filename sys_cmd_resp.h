@@ -34,7 +34,8 @@ public:
     QString Client_ID = "";
     QString ServerIP ="";
     QString ServerPort ="";
-    qint32 triggeer_interval =0;
+    quint32 m_set_trigger_distance =0;
+    double m_trigger_distance_total=0.0;
 
     struct roi_geometry{
         quint32 x0;

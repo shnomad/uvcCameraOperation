@@ -9,7 +9,7 @@
 #include "cli_monitor.h"
 #include "oled_display.h"
 #include "mqtt.h"
-#include "image_post_process.h"
+//#include "image_post_process.h"
 
 class controller : public QObject
 {
@@ -36,8 +36,8 @@ private:
     CameraThread *m_camera;
 
     /*Image process thread*/
-    QThread *m_pImagePostProcessThread;
-    image_post_process *m_img_PostProcess;
+//    QThread *m_pImagePostProcessThread;
+//    image_post_process *m_img_PostProcess;
 
     /*oled display*/                
     oled_display *m_oled_display;

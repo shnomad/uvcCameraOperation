@@ -258,7 +258,7 @@ bool mqtt::pub_response_topic()
     {
         Log()<<client_id<<" :pub_response_topic success";
 
-        sub_topic_trigger_timer->start();
+//      sub_topic_trigger_timer->start();
 
         return true;
     }

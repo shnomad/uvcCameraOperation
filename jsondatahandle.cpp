@@ -126,15 +126,15 @@ sys_cmd_resp* JsonDataHandle::cmd_parsing(QString message)
         case sys_cmd_resp::CMD_CAMERA_OPEN:
         case sys_cmd_resp::CMD_CAMERA_CAPTURE:
             {
-              QJsonValue trigger = jsonObj.value("trigger");
+              QJsonValue trigger = jsonObj.value("distance");
               QString trigger_tmp = trigger.toString();
-              cmd_from_host->triggeer_interval = trigger_tmp.toInt();                
+              cmd_from_host->m_trigger_distance_total = trigger_tmp.toInt();
 
               QJsonValue capturemode = jsonObj.value("capturemode");
               QString mode_tmp = capturemode.toString();
               cmd_from_host->m_camera_capture_mode = static_cast<sys_cmd_resp::camera_capture_mode>(mode_tmp.toInt());
 
-              Log()<<"cmd_from_host->triggeer_interval :"<<cmd_from_host->triggeer_interval;
+              Log()<<"cmd_from_host->triggeer_interval :"<<cmd_from_host->m_trigger_distance_total;
               Log()<<"cmd_from_host->capturemode :"<<cmd_from_host->m_camera_capture_mode;
             }
 

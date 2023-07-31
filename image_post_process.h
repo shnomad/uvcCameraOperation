@@ -16,16 +16,15 @@ signals:
     void sig_image_concat_working();
 
 public slots:
-     void read_image(const QByteArray &img, QString filename);
-   //  void read_image(void *img, QString filename);
+    void image_roi_concat();
 
 private:
     imageWarpPerspective *m_imageWarp;
     image_concat *m_image_concat;
 
     /*JPEG Image Buffer*/
-    QVector<Mat> imageBuffer;
-    QVector<QString> imageNameBuffer;
+    QVector<Mat> warpedImage;
+//  QVector<QString> imageNameBuffer;
 
     /*temporary geometry*/
     int x0=108, x1=523, x2=87, x3=561, y0=204, y1=194, y2=391, y3=308;

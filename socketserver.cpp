@@ -1,6 +1,7 @@
 #include "common.h"
 #include "socketserver.h"
 #include "deviceinfo.h"
+//#include "global.h"
 
 SocketServer::SocketServer(QObject *parent) : QObject(parent)
 {
@@ -264,7 +265,6 @@ void SocketServer::sendAttachment(QTcpSocket* socket, void *file, QString file_n
       {
         if(socket->isOpen())
           {                        
-
             QDataStream socketStream(socket);
             socketStream.setVersion(QDataStream::Qt_5_15);
 
@@ -278,11 +278,40 @@ void SocketServer::sendAttachment(QTcpSocket* socket, void *file, QString file_n
             bytearray.prepend(header);
 
             socketStream << bytearray;
-
+#if 0
             bytearray = bytearray.mid(128);
 
-            emit sig_send_file(bytearray, file_name);
+            Log()<<"capture_mode :"<<capture_mode;
 
+            if(capture_mode == 0)
+            {
+                capture_count++;
+
+                if(capture_count<101)
+                {
+                    global.jpg_file_buffer_0.push_back(bytearray);
+                    global.img_file_name_buffer_0.push_back(file_name);
+
+                   if(global.jpg_file_buffer_0.length() ==100 && global.img_file_name_buffer_0.length()==100)
+                       emit sig_image_post_process();
+                }
+                else if(capture_count>100 && capture_count<201)
+                {
+                    global.jpg_file_buffer_1.push_back(bytearray);
+                    global.img_file_name_buffer_1.push_back(file_name);
+                }
+                else
+                {
+                    global.jpg_file_buffer_2.push_back(bytearray);
+                    global.img_file_name_buffer_2.push_back(file_name);
+
+                    if(global.jpg_file_buffer_2.length() ==100 && global.img_file_name_buffer_2.length()==100)
+                    {
+                        capture_count=0;
+                    }
+                }
+            }
+#endif
           }
           else
           {

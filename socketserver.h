@@ -17,7 +17,8 @@ public:
 
 signals:
      void newMessage(QString);
-     void sig_send_file(const QByteArray , QString);
+//   void sig_send_file(const QByteArray , QString);
+     void sig_image_post_process();
 
 public slots:
     void sendAttachment_click(void *img, QString img_name, quint32 img_size, quint8 mode);
@@ -41,6 +42,9 @@ private:
      QTcpServer* m_server;
      QSet<QTcpSocket*> connection_set;
      QTcpSocket* recv_socket;
+
+     quint32 capture_count =0;
+
 //   QDataStream socketStream;
 };
 
