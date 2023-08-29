@@ -124,7 +124,7 @@ void CameraThread::capture_ready()
 
 void CameraThread::capture(QString trigger_value, sys_cmd_resp::camera_capture_mode capture_mode)
 {
-    res = uvc_stream_get_frame(m_strmh, &captured_frame,0);        
+    res = uvc_stream_get_frame(m_strmh, &captured_frame,0);
 
 //  QDateTime Current_Time = QDateTime::currentDateTime();
 
@@ -136,14 +136,6 @@ void CameraThread::capture(QString trigger_value, sys_cmd_resp::camera_capture_m
 
      emit sig_send_image_file(captured_frame->data, filename, captured_frame->data_bytes, static_cast<quint8>(capture_mode));
 
-//   imageBuffer.push_back(QByteArray(static_cast<const char*>(captured_frame->data), captured_frame->data_bytes));
-//   imageNameBuffer.push_back(filename);
-/*
-   if(imageBuffer.length()==100 && imageNameBuffer.length()==100)
-   {
-        emit sig_image_save_start();
-   }
-*/
 /*
     FILE *fp;
 
@@ -192,11 +184,27 @@ void CameraThread::operation(sys_cmd_resp *cmd)
 
         case sys_cmd_resp::CMD_CAMERA_CAPTURE:         
 
-         Log()<<"cmd->triggeer_interval :"<<cmd->m_trigger_distance_total;
+            Log()<<"isCameraCaptureEnable :"<<isCameraCaptureEnable;
 
-         capture(QString("%1").arg(cmd->m_trigger_distance_total, 7, 'g', -1, '0'), cmd->m_camera_capture_mode);
+           if(isCameraCaptureEnable ==true || cmd->m_camera_capture_mode == sys_cmd_resp::CAPTURE_MODE_TEST)
+           {
+                 Log()<<"cmd->triggeer_interval :"<<cmd->m_trigger_distance_total;
+                 capture(QString("%1").arg(cmd->m_trigger_distance_total, 7, 'g', -1, '0'), cmd->m_camera_capture_mode);
+           }
 
         break;
+
+         case sys_cmd_resp::CMD_CAMERA_CAPTURE_ENABLE:
+         /*When Survey Ready, sent from Road Image Logger*/
+            isCameraCaptureEnable = true;
+            Log()<<isCameraCaptureEnable;
+         break;
+
+         case sys_cmd_resp::CMD_CAMERA_CAPTURE_DISABLE:
+         /*When Survey Ready, sent from Road Image Logger*/
+            isCameraCaptureEnable = false;
+            Log()<<isCameraCaptureEnable;
+         break;
 
         case sys_cmd_resp::CMD_CAMERA_CLOSE:
 

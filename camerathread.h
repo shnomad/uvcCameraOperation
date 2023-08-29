@@ -44,6 +44,8 @@ private:
     /*JPEG Image Buffer*/
     QVector<QByteArray> imageBuffer;
     QVector<QString> imageNameBuffer;
+
+    bool isCameraCaptureEnable = false;
 };
 
 #endif // CAMERATHREAD_H

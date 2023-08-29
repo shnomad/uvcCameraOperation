@@ -9,7 +9,7 @@ SocketServer::SocketServer(QObject *parent) : QObject(parent)
 
     m_server = new QTcpServer(this);
 
-//  m_server->setMaxPendingConnections(5);
+    m_server->setMaxPendingConnections(1);
 
     //if(m_server->listen(QHostAddress::Any, 60001))
     if(m_server->listen(QHostAddress::Any, m_dev_info.get_ServerPort().toUShort()))

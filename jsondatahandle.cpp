@@ -124,7 +124,16 @@ sys_cmd_resp* JsonDataHandle::cmd_parsing(QString message)
 
         case sys_cmd_resp::CMD_CAMERA_SET_TRIGGER_INTERVAL:
         case sys_cmd_resp::CMD_CAMERA_OPEN:
-        case sys_cmd_resp::CMD_CAMERA_CAPTURE:
+
+        case sys_cmd_resp::CMD_CAMERA_CAPTURE_ENABLE:
+        /*When Survey Ready*/
+        break;
+
+        case sys_cmd_resp::CMD_CAMERA_CAPTURE_DISABLE:
+        /*When Survey Stop*/
+        break;
+
+        case sys_cmd_resp::CMD_CAMERA_CAPTURE:        
             {
               QJsonValue trigger = jsonObj.value("distance");
               QString trigger_tmp = trigger.toString();

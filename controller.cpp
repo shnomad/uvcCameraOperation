@@ -44,11 +44,11 @@ controller::controller(QObject *parent) : QObject(parent)
 
     /*connecto Camera to TCP socket server*/
     connect(m_camera, SIGNAL(sig_send_image_file(void*,QString,quint32,quint8)), m_socket_server, SLOT(sendAttachment_click(void*,QString,quint32,quint8)));
- //   connect(m_socket_server, SIGNAL(sig_image_post_process()), m_img_PostProcess, SLOT(image_roi_concat()));
+ // connect(m_socket_server, SIGNAL(sig_image_post_process()), m_img_PostProcess, SLOT(image_roi_concat()));
 
     m_pCameraThread->start();
     m_poledThread->start();
-//    m_pImagePostProcessThread->start();
+//  m_pImagePostProcessThread->start();
 
     camera_init_timer->start(3000);
 
