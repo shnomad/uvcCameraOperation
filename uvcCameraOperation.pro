@@ -1,7 +1,8 @@
 QT -= gui
 
 QT += core network mqtt multimedia
-CONFIG += c++11 console
+//CONFIG += c++11 console
+CONFIG += c++19 console
 CONFIG -= app_bundle
 
 # The following define makes your compiler emit warnings if you use
@@ -18,6 +19,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         camerathread.cpp \
         cli_monitor.cpp \
+#       context.c \
+    config.c \
         controller.cpp \
         deviceinfo.cpp \
 #       display/display.c \
@@ -49,6 +52,7 @@ HEADERS += \
     jsondatahandle.h \
     mqtt.h \
     oled_display.h \
+    samples.h \
     setting_flagname_definition.h \
     settings.h \
     socketserver.h \
@@ -57,7 +61,8 @@ HEADERS += \
 INCLUDEPATH +=/opt/Rpi4-roadtech/sysroot/usr/local/include
 #INCLUDEPATH +=/opt/Rpi4-roadtech/sysroot/usr/local/lib/opencv-4.6.0/include/opencv4
 
-LIBS += -L/opt/Rpi4-roadtech/sysroot/usr/local/lib/arm-linux-gnueabihf -luvc
+LIBS += -L/opt/Rpi4-roadtech/sysroot/usr/local/lib -lgphoto2
+#LIBS += -L/opt/Rpi4-roadtech/sysroot/usr/local/lib/arm-linux-gnueabihf -luvc
 #        -L/opt/Rpi4-roadtech/sysroot/usr/local/lib/opencv-4.6.0/lib \
 #         -lopencv_calib3d \
 #         -lopencv_core \

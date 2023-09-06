@@ -21,11 +21,11 @@ signals:
     void sig_cmd_from_mqtt_to_camera(sys_cmd_resp *);
 
 public slots:
+    void resp_operation(sys_cmd_resp *);
     void setClientPort(int p);
     void ConnectBroker();
     void DisConnectBroker();
     void updateLogStateChange();
-
     void brokerDisconnected();
     void brokerConnected();
 

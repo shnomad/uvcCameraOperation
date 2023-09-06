@@ -97,8 +97,8 @@ mqtt::mqtt(QObject *parent) : QObject(parent)
            }
        });
 
-       connect(m_client, &QMqttClient::pingResponseReceived, this, [this](){
-
+       connect(m_client, &QMqttClient::pingResponseReceived, this, [this]()
+       {
             const QString content = QDateTime::currentDateTime().toString()
                         + QLatin1String(" PingResponse")
                         + QLatin1Char('\n');
@@ -289,7 +289,6 @@ bool mqtt::sub_trigger_topic()
     if(Subscribe(sub_topic_trigger + "+"))
     {
         Log()<<"sub_topic_trigger success";
-
         return true;
     }
 
@@ -316,3 +315,73 @@ QString mqtt::getLocalInfo()
     return localip;
 }
 
+void mqtt::resp_operation(sys_cmd_resp *resp)
+{
+
+#if 1
+    Log();
+    Publish(pub_topic_resp + client_id, json_to_cmd->encode_resp(client_id, resp), 1, false);
+
+#else
+    switch(resp->m_resp_cam)
+    {
+        case sys_cmd_resp::RESP_CAMERA_CONNECTED_CHECK_SUCCESS:
+        break;
+
+        case sys_cmd_resp::RESP_CAMERA_SERVER_INFO_SUCCESS:
+        break;
+
+        case sys_cmd_resp::RESP_CAMERA_SET_ROI_PARAMETER_SUCCESS:
+        break;
+
+        case sys_cmd_resp::RESP_CAMERA_SET_TRIGGER_INTERVAL_SUCCESS:
+        break;
+
+        case sys_cmd_resp::RESP_CAMERA_OPEN_SUCCESS:
+
+        break;
+
+        case sys_cmd_resp::RESP_CAMERA_CAPTURE_SUCCESS:
+        break;
+
+        case sys_cmd_resp::RESP_CAMERA_CLOSE_SUCCESS:
+        break;
+
+        case sys_cmd_resp::RESP_CAMERA_IMG_SEND_ONE_FRAME_SUCCESS:
+        break;
+
+        case sys_cmd_resp::RESP_CAMERA_SEND_ROI_IMG_SUCCESS:
+        break;
+
+        case sys_cmd_resp::RESP_CAMERA_CONNECTED_CHECK_FAIL:
+        break;
+
+        case sys_cmd_resp::RESP_CAMERA_SERVER_INFO_FAIL:
+        break;
+
+        case sys_cmd_resp::RESP_CAMERA_SET_ROI_PARAMETER_FAIL:
+        break;
+
+        case sys_cmd_resp::RESP_CAMERA_SET_TRIGGER_INTERVAL_FAIL:
+        break;
+
+        case sys_cmd_resp::RESP_CAMERA_OPEN_FAIL:
+        break;
+
+        case sys_cmd_resp::RESP_CAMERA_CAPTURE_FAIL:
+        break;
+
+        case sys_cmd_resp::RESP_CAMERA_CLOSE_FAIL:
+        break;
+
+        case sys_cmd_resp::RESP_CAMERA_IMG_SEND_ONE_FRAME_FAIL:
+        break;
+
+        case sys_cmd_resp::RESP_CAMERA_SEND_ROI_IMG_FAIL:
+        break;
+
+        case sys_cmd_resp::RESP_CAMERA_UNKNOWN:
+        break;
+    }
+#endif
+}

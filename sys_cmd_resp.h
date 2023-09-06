@@ -31,6 +31,9 @@ public:
         CAPTURE_MODE_UNKNOWN = 0xf,
     };Q_ENUM(camera_capture_mode)
 
+     QStringList theta_info;
+//    QString theta_info;
+
     QString Client_ID = "";
     QString ServerIP ="";
     QString ServerPort ="";

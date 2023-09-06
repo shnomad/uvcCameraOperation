@@ -1,10 +1,54 @@
 #include <QFile>
 #include "camerathread.h"
 #include "common.h"
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <QTextStream>
+#include "samples.h"
+
+static void ctx_error_func (GPContext *context, const char *str, void *data)
+{
+        fprintf  (stderr, "\n*** Contexterror ***              \n%s\n",str);
+        fflush   (stderr);
+}
+
+static void ctx_status_func (GPContext *context, const char *str, void *data)
+{
+        fprintf  (stderr, "%s\n", str);
+        fflush   (stderr);
+}
+
+GPContext* sample_create_context()
+{
+    GPContext *context;
+
+    /* This is the mandatory part */
+        context = gp_context_new();
+
+    /* All the parts below are optional! */
+        gp_context_set_error_func (context, ctx_error_func, NULL);
+        gp_context_set_status_func (context, ctx_status_func, NULL);
+
+    /* also:
+        gp_context_set_cancel_func    (p->context, ctx_cancel_func,  p);
+        gp_context_set_message_func   (p->context, ctx_message_func, p);
+        if (isatty (STDOUT_FILENO))
+        gp_context_set_progress_funcs (p->context,
+        ctx_progress_start_func, ctx_progress_update_func,
+        ctx_progress_stop_func, p);
+     */
+    return context;
+}
 
 CameraThread::CameraThread(QObject *parent) : QObject(parent)
 {
     resp_cam = new sys_cmd_resp;
+
+    init();
+
+    isCameraCaptureEnable = true;
 
     connect(this, &CameraThread::sig_image_save_start, [&]()
     {
@@ -34,133 +78,251 @@ CameraThread::~CameraThread()
 
 }
 
-void CameraThread::cb(uvc_frame_t *frame, void *ptr)
-{
-    Q_UNUSED(frame);
-    Q_UNUSED(ptr);
-}
-
 void CameraThread::init()
 {
+    /*gphoto2 handler*/
+    int     ret;    
+//  unsigned long size;
 
-    /* Initialize a UVC service context. Libuvc will set up its own libusb
-     * context. Replace NULL with a libusb_context pointer to run libuvc
-     * from an existing libusb context. */
-    res = uvc_init(&ctx, nullptr);
+    context = sample_create_context (); /* see context.c */
+    gp_camera_new (&camera);
 
-    if (res < 0)
+    /* This call will autodetect cameras, take the
+     * first one from the list and use it. It will ignore
+     * any others... See the *multi* examples on how to
+     * detect and use more than the first one.
+     */
+    ret = gp_camera_init (camera, context);
+
+    if (ret < GP_OK)
     {
-          uvc_perror(res, "uvc_init");
-          exit(0);
+        Log()<<"No camera auto detected";
+        gp_camera_free (camera);
+    }
+#if 0
+    /* Simple query the camera summary text */
+    ret = gp_camera_get_summary (camera, &text, context);
+
+    if (ret < GP_OK)
+    {
+        Log()<<"Camera failed retrieving summary.\n";
+        gp_camera_free (camera);
     }
 
-    Log()<<"UVC initialized";
+    /*
+     *
+        "Manufacturer: Ricoh Company, Ltd."
+        "Model: RICOH THETA Z1"
+        "Version: 2.30.1"
+        "Serial Number: 32100
+    */
 
-    /* Locates the first attached UVC device, stores in dev */
-    res = uvc_find_device(ctx, &dev,0, 0, nullptr); /* filter devices: vendor_id, product_id, "serial_num" */
+     QString thetainfo(text.text);
 
-    if (res < 0)
+     QStringList Lines = thetainfo.split('\n');
+
+     for (int i = 0; i <4; i++)
+      {
+            Log()<<Lines[i];
+            resp_cam->theta_info << Lines[i];
+      }
+
+     resp_cam->m_resp_cam = sys_cmd_resp::RESP_CAMERA_OPEN_SUCCESS;
+     emit sig_resp_cam_cmd(resp_cam);
+
+    /* Simple query of a string configuration variable. */
+    ret = get_config_value_string (camera, "owner", &owner, context);
+
+    if (ret >= GP_OK)
     {
-        uvc_perror(res, "uvc_find_device"); /* no devices found */
-        exit(0);
+        printf("Owner: %s\n", owner);
+        free (owner);
     }
-    else
-    {
-      Log()<<"Device found";
-    }
+#endif
+
+//    capture_to_file(camera, context, "/home/rt/theta_img");
+//    capture_to_memory(camera, context, (const char**)&data, &size);
+//    capture("20230831.jpg", sys_cmd_resp::CAPTURE_MODE_TEST);
 }
 
-void CameraThread::open()
+
+void CameraThread::OPen()
 {
-    init();
+    int     ret;
+    char    *owner;
 
-    /* Try to open the device: requires exclusive access */
-    res = uvc_open(dev, &devh);
+    /* Simple query the camera summary text */
+    ret = gp_camera_get_summary (camera, &text, context);
 
-    if (res < 0)
+    if (ret < GP_OK)
     {
-          uvc_perror(res, "uvc_open"); /* unable to open device */
-//        exit(0);
+        Log()<<"Camera failed retrieving summary.\n";
+        gp_camera_free (camera);
     }
-    else
+
+    /*
+     *
+        "Manufacturer: Ricoh Company, Ltd."
+        "Model: RICOH THETA Z1"
+        "Version: 2.30.1"
+        "Serial Number: 32100
+    */
+
+     QString thetainfo(text.text);
+
+     QStringList Lines = thetainfo.split('\n');
+
+     for (int i = 0; i <4; i++)
+      {
+            Log()<<Lines[i];
+            resp_cam->theta_info << Lines[i];
+      }    
+
+     resp_cam->m_resp_cam = sys_cmd_resp::RESP_CAMERA_OPEN_SUCCESS;
+     emit sig_resp_cam_cmd(resp_cam);
+
+    /* Simple query of a string configuration variable. */
+    ret = get_config_value_string (camera, "owner", &owner, context);
+
+    if (ret >= GP_OK)
     {
-      Log()<<"Device opened";
-
-      /* Print out a message containing all the information that libuvc
-       * knows about the device */
-         uvc_print_diag(devh, stderr);
-
-      /* Try to negotiate a 2592x1944 30 fps MJPG stream profile */
-      res = uvc_get_stream_ctrl_format_size(
-          devh, &ctrl, /* result stored in ctrl */
-          UVC_COLOR_FORMAT_MJPEG, /* YUV 422, aka YUV 4:2:2. try _COMPRESSED */
-          2592, 1944, 30 /* width, height, fps */
-      );
-
-      /* Print out the result */
-      uvc_print_stream_ctrl(&ctrl, stderr);
-
-      if (res < 0)
-      {
-        uvc_perror(res, "get_mode"); /* device doesn't provide a matching stream */
-        exit(0);
-      }
-      else
-      {
-          capture_ready();
-      }
-   }
-
+        printf("Owner: %s\n", owner);
+        free (owner);
+    }
 }
 
 void CameraThread::capture_ready()
 {
-    captured_frame = uvc_allocate_frame(ctrl.dwMaxVideoFrameSize);
 
-    res = uvc_stream_open_ctrl(devh, &m_strmh, &ctrl);
-
-    res = uvc_stream_start(m_strmh, nullptr,nullptr,0);
 }
 
 void CameraThread::capture(QString trigger_value, sys_cmd_resp::camera_capture_mode capture_mode)
-{
-    res = uvc_stream_get_frame(m_strmh, &captured_frame,0);
+{    
+    char    *owner, *data;
+    unsigned long size;
 
-//  QDateTime Current_Time = QDateTime::currentDateTime();
+    QString filename = trigger_value + ".jpg";
 
-   //QString filename = "/home/rt/capture_file/" +Current_Time.toString("yyyyMMddhhmmsszzz") + ".jpg";
-     QString filename = trigger_value + ".jpg";
-   //QString filename = "/home/rt/capture_file/" +trigger_value + ".jpg";
+    capture_to_memory(camera, context, (const char**)&data, &size);
 
-     Log()<<filename;
-
-     emit sig_send_image_file(captured_frame->data, filename, captured_frame->data_bytes, static_cast<quint8>(capture_mode));
+    emit sig_send_image_file(data, filename, size, static_cast<quint8>(capture_mode));
 
 /*
-    FILE *fp;
+    QByteArray tmp_buf = QByteArray::fromRawData(data, size);
 
-    fp = fopen(filename.toStdString().c_str(), "w");
+    QFile f("/home/rt/test.jpg");
 
-    fwrite(captured_frame->data, 1, captured_frame->data_bytes, fp);
+    if(f.open(QIODevice::WriteOnly))
+    {
+        f.write(tmp_buf);
+    }
 
-    fclose(fp);
-
-    Log();
+    f.close();
 */
+
+}
+
+void CameraThread::capture_to_memory(Camera *camera, GPContext *context, const char **ptr, unsigned long int *size)
+{
+    int retval;
+    CameraFile *file;
+    CameraFilePath camera_file_path;
+
+    Log()<<"Capturing";
+
+    /* NOP: This gets overridden in the library to /capt0000.jpg */
+    strcpy(camera_file_path.folder, "/store_00020001/DCIM/100RICOH/");
+    strcpy(camera_file_path.name, "foo.jpg");
+
+    retval = gp_camera_capture(camera, GP_CAPTURE_IMAGE, &camera_file_path, context);
+    Log()<<"Retval :"<< retval;
+
+    Log()<< QString("Pathname on the camera: %1 %2").arg(camera_file_path.folder).arg(camera_file_path.name);
+
+    retval = gp_file_new(&file);
+    Log()<<"Retval: "<<retval;
+    retval = gp_camera_file_get(camera, camera_file_path.folder, camera_file_path.name, GP_FILE_TYPE_NORMAL, file, context);
+    Log()<<"Retval: "<<retval;
+
+    gp_file_get_data_and_size (file, ptr, size);
+#if 0
+    tmp_buf = QByteArray::fromRawData(*ptr, *size);
+
+    QFile f("/home/rt/test.jpg");
+
+    if(f.open(QIODevice::WriteOnly))
+    {
+        f.write(tmp_buf);
+    }
+
+    f.close();
+#endif
+
+    Log()<<"Deleting";
+    retval = gp_camera_file_delete(camera, camera_file_path.folder, camera_file_path.name, context);
+    Log()<<"Retval: %d\n";
+}
+
+void CameraThread::capture_to_file(Camera *camera, GPContext *context, char *fn)
+{
+    int		fd, retval;
+    CameraFile	*file;
+    CameraFilePath	camera_file_path;
+    CameraFileInfo	info;
+
+    Log()<<"Capturing.\n";
+
+    /* NOP: This gets overridden in the library to /capt0000.jpg */
+    strcpy(camera_file_path.folder, "/store_00020001/DCIM/100RICOH/");
+    strcpy(camera_file_path.name, "foo.jpg");
+
+    Log()<<"capture Start";
+    retval = gp_camera_capture(camera, GP_CAPTURE_IMAGE, &camera_file_path, context);
+    Log()<<"capture End";
+
+    Log()<<"Retval:"<<retval;
+
+// Log()<<"Pathname on the camera: %s/%s\n"<<camera_file_path.folder<<camera_file_path.name;
+
+    Log()<< QString("Pathname on the camera: %1 %2").arg(camera_file_path.folder).arg(camera_file_path.name);
+
+    retval = gp_camera_file_get_info (camera, camera_file_path.folder, camera_file_path.name, &info, context);
+
+    Log()<<"file info reported flags: "<<info.file.fields;
+
+    if (info.file.fields & GP_FILE_INFO_MTIME)
+        Log()<<"info reported mtime: %ld\n"<<info.file.mtime;
+
+    if (info.file.fields & GP_FILE_INFO_SIZE)
+        Log()<<"info reported size: %ld\n"<<info.file.size;
+
+    if (info.file.fields & GP_FILE_INFO_TYPE)
+        Log()<<"info reported type: %s\n"<<info.file.type;
+
+    fd = open(fn, O_CREAT | O_WRONLY | O_BINARY, 0644);
+
+    retval = gp_file_new_from_fd(&file, fd);
+
+    Log()<<"Retval: "<<retval;
+
+    retval = gp_camera_file_get(camera, camera_file_path.folder, camera_file_path.name, GP_FILE_TYPE_NORMAL, file, context);
+
+    Log()<<"Retval: "<<retval;
+
+    gp_file_free(file);
+
+    Log()<<"Deleting.\n";
+
+    retval = gp_camera_file_delete(camera, camera_file_path.folder, camera_file_path.name, context);
+
+    Log()<<"Retval: "<<retval;
 }
 
 void CameraThread::close()
 {
-    uvc_close(devh);
-    Log()<<"Device closed";
-
-    /* Release the device descriptor */
-    uvc_unref_device(dev);
-
-    /* Close the UVC context. This closes and cleans up any existing device handles,
-    * and it closes the libusb context if one was not provided. */
-    uvc_exit(ctx);
-    Log()<<"UVC exited";
+    gp_camera_exit (camera, context);
+    gp_camera_free (camera);
+    gp_context_unref (context);
 }
 
 void CameraThread::operation(sys_cmd_resp *cmd)
@@ -177,34 +339,45 @@ void CameraThread::operation(sys_cmd_resp *cmd)
          break;
 
         case sys_cmd_resp::CMD_CAMERA_OPEN:
-
-         open();
-
+            OPen();
         break;
 
         case sys_cmd_resp::CMD_CAMERA_CAPTURE:         
 
-            Log()<<"isCameraCaptureEnable :"<<isCameraCaptureEnable;
+           Log()<<"isCameraCaptureEnable :"<<isCameraCaptureEnable;
+
+           cmd->m_camera_capture_mode = sys_cmd_resp::CAPTURE_MODE_TEST;
 
            if(isCameraCaptureEnable ==true || cmd->m_camera_capture_mode == sys_cmd_resp::CAPTURE_MODE_TEST)
            {
                  Log()<<"cmd->triggeer_interval :"<<cmd->m_trigger_distance_total;
+
+                 isCameraCaptureEnable = false;
+
                  capture(QString("%1").arg(cmd->m_trigger_distance_total, 7, 'g', -1, '0'), cmd->m_camera_capture_mode);
-           }
+
+                 isCameraCaptureEnable = true;
+           }           
+
+           Log()<<"isCameraCaptureEnable :"<<isCameraCaptureEnable;
 
         break;
 
-         case sys_cmd_resp::CMD_CAMERA_CAPTURE_ENABLE:
+        case sys_cmd_resp::CMD_CAMERA_CAPTURE_ENABLE:
+
          /*When Survey Ready, sent from Road Image Logger*/
             isCameraCaptureEnable = true;
             Log()<<isCameraCaptureEnable;
-         break;
 
-         case sys_cmd_resp::CMD_CAMERA_CAPTURE_DISABLE:
+        break;
+
+        case sys_cmd_resp::CMD_CAMERA_CAPTURE_DISABLE:
+
          /*When Survey Ready, sent from Road Image Logger*/
             isCameraCaptureEnable = false;
             Log()<<isCameraCaptureEnable;
-         break;
+
+        break;
 
         case sys_cmd_resp::CMD_CAMERA_CLOSE:
 

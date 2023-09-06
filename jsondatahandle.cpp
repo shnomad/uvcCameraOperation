@@ -32,16 +32,20 @@ QString JsonDataHandle::encode_resp(QString channel,sys_cmd_resp *response)
             mainObject.insert("serverPort", response->ServerPort);
        break;
 
-       case sys_cmd_resp::RESP_CAMERA_SET_ROI_PARAMETER_SUCCESS:
+       case sys_cmd_resp::RESP_CAMERA_SET_ROI_PARAMETER_SUCCESS:       
        break;
 
-       case sys_cmd_resp::RESP_CAMERA_SET_TRIGGER_INTERVAL_SUCCESS:
+       case sys_cmd_resp::RESP_CAMERA_SET_TRIGGER_INTERVAL_SUCCESS:      
        break;
 
        case sys_cmd_resp::RESP_CAMERA_OPEN_SUCCESS:
+            {
+                QJsonArray theta_value = QJsonArray::fromStringList(response->theta_info);
+                mainObject.insert("theta_info",theta_value);
+            }
        break;
 
-       case sys_cmd_resp::RESP_CAMERA_CAPTURE_SUCCESS:
+       case sys_cmd_resp::RESP_CAMERA_CAPTURE_SUCCESS:       
        break;
 
        case sys_cmd_resp::RESP_CAMERA_CLOSE_SUCCESS:
@@ -90,6 +94,8 @@ QString JsonDataHandle::encode_resp(QString channel,sys_cmd_resp *response)
 
     /* Write our jsondocument as json with JSON format */
      QString encode_data = QString::fromUtf8(jsonDoc.toJson());
+
+     Log()<<encode_data;
 
      return encode_data;
 }
