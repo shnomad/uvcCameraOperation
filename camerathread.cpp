@@ -346,7 +346,7 @@ void CameraThread::operation(sys_cmd_resp *cmd)
 
            Log()<<"isCameraCaptureEnable :"<<isCameraCaptureEnable;
 
-           cmd->m_camera_capture_mode = sys_cmd_resp::CAPTURE_MODE_TEST;
+          //cmd->m_camera_capture_mode = sys_cmd_resp::CAPTURE_MODE_TEST;
 
            if(isCameraCaptureEnable ==true || cmd->m_camera_capture_mode == sys_cmd_resp::CAPTURE_MODE_TEST)
            {

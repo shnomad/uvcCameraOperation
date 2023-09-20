@@ -9,7 +9,7 @@ if [ $input == "update" ];then
 #    sshpass -p 'rt2023' rsync -avz /home/user/build-uvcCameraOperation-RPi4_roadtech-Debug/uvcCameraOperation -e ssh root@10.42.0.83:/home/rt/uvcCameraOperation/bin
 #    sshpass -p 'rt2023' rsync -avz /home/user/build-uvcCameraOperation-RPi4_roadtech-Debug/uvcCameraOperation -e ssh root@10.42.0.30:/home/rt/uvcCameraOperation/bin
 #    sshpass -p 'rt2023' rsync -avz /home/user/build-uvcCameraOperation-RPi4_roadtech-Debug/uvcCameraOperation -e ssh root@10.42.0.220:/home/rt/uvcCameraOperation/bin
-    
+
     sshpass -p 'rt2023' rsync -avz  /home/user/build-uvcCameraOperation-Qt5_15_7_rpi-Release/uvcCameraOperation -e ssh root@10.42.0.91:/home/rt/uvcCameraOperation/bin
     sshpass -p 'rt2023' rsync -avz  /home/user/build-uvcCameraOperation-Qt5_15_7_rpi-Release/uvcCameraOperation -e ssh root@10.42.0.70:/home/rt/uvcCameraOperation/bin
     sshpass -p 'rt2023' rsync -avz  /home/user/build-uvcCameraOperation-Qt5_15_7_rpi-Release/uvcCameraOperation -e ssh root@10.42.0.83:/home/rt/uvcCameraOperation/bin
