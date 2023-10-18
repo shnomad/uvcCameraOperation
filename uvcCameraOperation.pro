@@ -57,7 +57,7 @@ HEADERS += \
 INCLUDEPATH +=/opt/Rpi4-roadtech/sysroot/usr/local/include
 #INCLUDEPATH +=/opt/Rpi4-roadtech/sysroot/usr/local/lib/opencv-4.6.0/include/opencv4
 
-LIBS += -L/opt/Rpi4-roadtech/sysroot/usr/local/lib/arm-linux-gnueabihf -luvc
+LIBS += -L/opt/Rpi4-roadtech/sysroot/usr/local/lib/aarch64-linux-gnu -luvc
 #        -L/opt/Rpi4-roadtech/sysroot/usr/local/lib/opencv-4.6.0/lib \
 #         -lopencv_calib3d \
 #         -lopencv_core \

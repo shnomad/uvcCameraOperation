@@ -32,8 +32,8 @@ controller::controller(QObject *parent) : QObject(parent)
     connect(m_poledThread, &QThread::finished, m_oled_display, &QObject::deleteLater);
 
     /*Image Post Process Thread*/
-//    m_img_PostProcess = new image_post_process;
-//    m_pImagePostProcessThread = new QThread(this);
+//  m_img_PostProcess = new image_post_process;
+//  m_pImagePostProcessThread = new QThread(this);
 
 //    m_img_PostProcess->moveToThread(m_pImagePostProcessThread);
  //   connect(m_pImagePostProcessThread, &QThread::finished, m_img_PostProcess, &QObject::deleteLater);
@@ -50,22 +50,29 @@ controller::controller(QObject *parent) : QObject(parent)
     m_poledThread->start();
 //  m_pImagePostProcessThread->start();
 
-    camera_init_timer->start(3000);
+    camera_init_timer->start(2000);
+
+    /*internal capture test*/
+    camera_capture_timer->start(8000);
 
     connect(camera_capture_timer, &QTimer::timeout, [=]()
     {
-        cmd_host->m_cmd_cam = sys_cmd_resp::CMD_CAMERA_CAPTURE;
+        //cmd_host->m_cmd_cam = sys_cmd_resp::CMD_CAMERA_CAPTURE;
+        cmd_host->m_cmd_cam = sys_cmd_resp::CMD_CAMERA_CAPTURE_INTERNAL;
         emit sig_cmd_camera_from_main(cmd_host);
 
         capture_count++;
 
         if(capture_count<100)
         {
-            cmd_host->m_trigger_distance_total +=100;
-            camera_capture_timer->start(50);
+//         cmd_host->m_trigger_distance_total +=100;
+           camera_capture_timer->start(50);
         }
         else
         {
+            cmd_host->m_cmd_cam = sys_cmd_resp::CMD_CAMERA_CAPTURE_INTERNAL_END;
+            emit sig_cmd_camera_from_main(cmd_host);
+
             cmd_host->m_trigger_distance_total = 0;
             capture_count=0;
         }

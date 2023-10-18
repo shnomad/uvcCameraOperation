@@ -30,6 +30,7 @@ private:
 //    void capture();
     //void capture(QString);
     void capture(QString, sys_cmd_resp::camera_capture_mode);
+    void capture_internal();
     void close();
 
     /*parameter for UVC Camera*/

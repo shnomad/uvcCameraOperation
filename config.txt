@@ -1,3 +1,1 @@
-[all]
-#mqtt broker IP#mqtt Clientname#TCP SocketServer Port
-#10.42.0.69#ch1#60001
+#192.168.137.1#usb-camera-ch1#60001

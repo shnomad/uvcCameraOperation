@@ -135,18 +135,31 @@ void CameraThread::capture(QString trigger_value, sys_cmd_resp::camera_capture_m
      Log()<<filename;
 
      emit sig_send_image_file(captured_frame->data, filename, captured_frame->data_bytes, static_cast<quint8>(capture_mode));
+}
+
+void CameraThread::capture_internal()
+{
+    res = uvc_stream_get_frame(m_strmh, &captured_frame,0);
+
+    QDateTime Current_Time = QDateTime::currentDateTime();
+    QString filename = "/home/linaro/capture_file/" +Current_Time.toString("yyyy-MM-dd-hh-mm-ss-zzz") + ".jpg";
+
+//  QByteArray bytearray = QByteArray(static_cast<const char*>(captured_frame->data), captured_frame->data_bytes);
+
+
+//  FILE *fp;
+
+    imageBuffer.push_back(QByteArray(static_cast<const char*>(captured_frame->data), captured_frame->data_bytes));
+    imageNameBuffer.push_back(filename);
 
 /*
-    FILE *fp;
-
     fp = fopen(filename.toStdString().c_str(), "w");
 
     fwrite(captured_frame->data, 1, captured_frame->data_bytes, fp);
 
     fclose(fp);
-
-    Log();
 */
+
 }
 
 void CameraThread::close()
@@ -222,6 +235,18 @@ void CameraThread::operation(sys_cmd_resp *cmd)
         case sys_cmd_resp::CMD_CAMERA_SERVER_INFO:
 
         break;
+
+        case sys_cmd_resp::CMD_CAMERA_CAPTURE_INTERNAL:
+
+         capture_internal();
+
+        break;
+
+         case sys_cmd_resp::CMD_CAMERA_CAPTURE_INTERNAL_END:
+
+        emit sig_image_save_start();
+
+         break;
 
         case sys_cmd_resp::CMD_CAMERA_UNKNOWN:
         break;
