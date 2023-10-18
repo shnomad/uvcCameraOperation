@@ -14,7 +14,7 @@ deviceInfo::~deviceInfo()
 QString deviceInfo::get_ClientID()
 {
 //    QString filename = "/boot/config.txt";
-    QString filename = "/home/rt/config.txt";
+    QString filename = "/home/linaro/config.txt";
 
     QFile file(filename);
 
@@ -37,7 +37,7 @@ QString deviceInfo::get_ClientID()
 QString deviceInfo::get_BrokerIP()
 {
 //  QString filename = "/boot/config.txt";
-    QString filename = "/home/rt/config.txt";
+    QString filename = "/home/linaro/config.txt";
 
     QFile file(filename);
 
@@ -60,7 +60,7 @@ QString deviceInfo::get_BrokerIP()
 QString deviceInfo::get_ServerPort()
 {
 //    QString filename = "/boot/config.txt";
-    QString filename = "/home/rt/config.txt";
+    QString filename = "/home/linaro/config.txt";
 
     QFile file(filename);
 

@@ -82,5 +82,5 @@ LIBS += -L/opt/Rpi4-roadtech/sysroot/usr/local/lib/aarch64-linux-gnu -luvc
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /home/rt/$${TARGET}/bin
+else: unix:!android: target.path = /home/linaro/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target

@@ -6,6 +6,10 @@ Wants=network-online.target
 
 [Service]
 Type=simple
+#User=pi
+#WorkingDirectory=/home/pi/Battery_LifeTime_Test/bin
+#ExecStart=/home/pi/Battery_LifeTime_Test/bin/Battery_LifeTime_Test
+#ExecStart=/bin/bash -c '. "$0" && exec "$@"' /etc/profile.d/qt_eglfs.sh /home/pi/Battery_LifeTime_Test/bin/Battery_LifeTime_Test
 User=root
 WorkingDirectory=/home/rt/uvcCameraOperation/bin/
 ExecStart=/bin/bash -c '/home/rt/uvcCameraOperation/bin/uvcCameraOperation /home/rt/uvcCam.log 2>&1'

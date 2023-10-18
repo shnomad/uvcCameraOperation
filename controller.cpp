@@ -35,8 +35,8 @@ controller::controller(QObject *parent) : QObject(parent)
 //  m_img_PostProcess = new image_post_process;
 //  m_pImagePostProcessThread = new QThread(this);
 
-//    m_img_PostProcess->moveToThread(m_pImagePostProcessThread);
- //   connect(m_pImagePostProcessThread, &QThread::finished, m_img_PostProcess, &QObject::deleteLater);
+//  m_img_PostProcess->moveToThread(m_pImagePostProcessThread);
+//  connect(m_pImagePostProcessThread, &QThread::finished, m_img_PostProcess, &QObject::deleteLater);
 
     /*connect command/response signal*/
     connect(this, SIGNAL(sig_cmd_camera_from_main(sys_cmd_resp*)), m_camera, SLOT(operation(sys_cmd_resp*)));
@@ -53,7 +53,7 @@ controller::controller(QObject *parent) : QObject(parent)
     camera_init_timer->start(2000);
 
     /*internal capture test*/
-    camera_capture_timer->start(8000);
+   //camera_capture_timer->start(8000);
 
     connect(camera_capture_timer, &QTimer::timeout, [=]()
     {
