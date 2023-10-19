@@ -58,10 +58,11 @@ HEADERS += \
     socketserver.h \
     sys_cmd_resp.h
 
-INCLUDEPATH +=/opt/Rpi4-roadtech/sysroot/usr/local/include
+INCLUDEPATH +=/opt/core3566/sysroot/usr/local/include
+INCLUDEPATH +=/opt/core3566/sysroot/usr/include
 #INCLUDEPATH +=/opt/Rpi4-roadtech/sysroot/usr/local/lib/opencv-4.6.0/include/opencv4
 
-LIBS += -L/opt/Rpi4-roadtech/sysroot/usr/local/lib -lgphoto2
+LIBS += -L/opt/core3566/sysroot/usr/lib/aarch64-linux-gnu -lgphoto2
 #LIBS += -L/opt/Rpi4-roadtech/sysroot/usr/local/lib/arm-linux-gnueabihf -luvc
 #        -L/opt/Rpi4-roadtech/sysroot/usr/local/lib/opencv-4.6.0/lib \
 #         -lopencv_calib3d \
@@ -87,5 +88,5 @@ LIBS += -L/opt/Rpi4-roadtech/sysroot/usr/local/lib -lgphoto2
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /home/rt/$${TARGET}/bin
+else: unix:!android: target.path = /home/linaro/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target

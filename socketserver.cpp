@@ -216,7 +216,7 @@ void SocketServer::sendAttachment_click(void *img, QString img_name, quint32 img
     {        
         foreach (QTcpSocket* socket, connection_set)
         { 
-            if(socket->socketDescriptor() == receiver)
+//            if(socket->socketDescriptor() == receiver)
             {
                  sendAttachment(socket, img, img_name, img_size, capture_mode);
                  break;
